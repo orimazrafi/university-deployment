@@ -17,7 +17,7 @@ export const AuthHook = async (user: User, login: boolean) => {
         requestBody = {
             query: `
             mutation {
-              createUser(userInput: {email: "${user.email}", password: "${user.password}"}) {
+              createUser(userInput: {email: "${user.email}", password: "${user.password}", name: "${user.name}"}) {
                 _id
                 email
               }
@@ -25,7 +25,33 @@ export const AuthHook = async (user: User, login: boolean) => {
           `
         };
     }
-    const res: any = await axios.post('http://localhost:8000/graphql', requestBody);
 
-    return { res }
+
+    fetch('http://localhost:8000/graphql-university', {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!')
+        }
+        return res.json()
+
+
+    }).then(resData => {
+        console.log(resData)
+        // if (resData.data.login.token) {
+        //     this.context.login(
+        //         resData.data.login.token,
+        //         resData.data.login.userId,
+        //         resData.data.login.tokenExpiration)
+        // }
+    })
+        .catch(err => {
+            console.log(err)
+        }
+        )
+
 }

@@ -19,6 +19,7 @@ export const Auth = () => {
         event.preventDefault();
         const { res }: any = AuthHook(user, login);
         console.log(user, login)
+        console.log(res)
     }
 
     const handleForm = () => {
