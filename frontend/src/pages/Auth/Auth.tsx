@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import "./Auth.css";
-import { AuthHook } from "../../Hooks/AuthHook"
-export const Auth = () => {
+import { useDispatch } from "react-redux"
+import { reduxAuth } from "../../features/Users/UserSlice"
 
+
+export const Auth = (props: any) => {
+    const dispatch = useDispatch()
     const [user, setvalues] = useState({ email: "", password: "", name: "" });
-    const [login, setAuth] = useState<boolean>(true)
+    const [isLogin, setAuth] = useState<boolean>(true)
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = event.currentTarget
         setvalues(prevValue => (
@@ -15,11 +19,12 @@ export const Auth = () => {
         ))
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const { res }: any = AuthHook(user, login);
-        console.log(user, login)
-        console.log(res)
+        await dispatch(reduxAuth(user, isLogin))
+        console.log(props.history.location)
+        return window.location.replace("/")
+
     }
 
     const handleForm = () => {
@@ -28,7 +33,7 @@ export const Auth = () => {
 
     const handleClassName = () => {
         let className = 'form-actions';
-        return className += login ? ' login' : ' signup'
+        return className += isLogin ? ' isLogin' : ' signup'
 
     }
 
@@ -57,7 +62,7 @@ export const Auth = () => {
                     value={user.password}
                     onChange={handleChange} />
             </div>
-            {!login
+            {!isLogin
                 &&
                 <div className="form-control">
                     <label>
@@ -72,7 +77,7 @@ export const Auth = () => {
                 </div>
             }
             <div className={handleClassName()}>
-                <button type="submit">{login ? 'Login' : 'Signup'}</button>
+                <button type="submit">{isLogin ? 'isLogin' : 'Signup'}</button>
                 <button onClick={handleForm} type="button">change signin method </button>
             </div>
         </form>
