@@ -43,6 +43,7 @@ export const AuthHook = async (user: User, login: boolean) => {
   } catch (error) {
     console.error(error);
   }
+  return true
 
 
 

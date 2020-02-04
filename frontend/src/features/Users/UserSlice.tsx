@@ -27,18 +27,13 @@ export const {
 } = user.actions;
 export default user.reducer
 
-
-
-
-
-
-
 export const reduxAuth = (user: User, isLogin: boolean
 ) => async (dispatch: AppDispatch) => {
+    let isAuth = false;
     let requestBody = {
         query: `
               query {
-                login(email: "${user.email}", password: "${user.password}") {
+                loginUser(email: "${user.email}", password: "${user.password}") {
                   userId
                   name
                   token
@@ -61,28 +56,25 @@ export const reduxAuth = (user: User, isLogin: boolean
         };
     }
     try {
-        var { data } = await axios({
+        let { data } = await axios({
             method: "POST",
             url: "http://localhost:8000/graphql-university",
             data: requestBody
         });
+        if (data.errors) return new Error(data.errors[0].message)
+        // console.log(data.errors[0].message)
+        // if (data.data.login === null || data.data.createUser === null) return
+        isAuth = true
         if (isLogin) {
-            localStorage.setItem('credentials', JSON.stringify(data.data.login))
-            // dispatch(credentials(data.data.login))
+            localStorage.setItem('credentials', JSON.stringify(data.data.loginUser))
         } else {
             localStorage.setItem('credentials', JSON.stringify(data.data.createUser))
         }
 
-
-
-
     } catch (error) {
         console.error(error);
     }
-
-
-
-
+    return isAuth
 }
 
 

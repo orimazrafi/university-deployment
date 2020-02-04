@@ -13,9 +13,14 @@ export const Navbar = ({ name, token }: { name: string, token: string }) => (
                 </div>
             }
             {token &&
-                <div className="main-navbar__item navbar__item__courses">
-                    <NavLink to="/courses">Courses</NavLink>
-                </div>
+                <React.Fragment>
+                    <div className="main-navbar__item navbar__item__proffesores">
+                        <NavLink to="/proffesores">Proffesores</NavLink>
+                    </div>
+                    <div className="main-navbar__item navbar__item__courses">
+                        <NavLink to="/courses">Courses</NavLink>
+                    </div>
+                </React.Fragment>
             }
             {token &&
                 <React.Fragment>

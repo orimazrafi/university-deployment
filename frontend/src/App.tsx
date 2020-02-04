@@ -7,6 +7,7 @@ import { Auth } from './pages/Auth/Auth';
 import { Courses } from './pages/Courses/Courses';
 import { NotFound } from './pages/NotFound/NotFound';
 import { Logout } from './pages/Logout/Logout';
+import { Proffesores } from './pages/Proffesores/Proffesores';
 
 
 
@@ -14,11 +15,13 @@ const App = () => {
   const credentials: any = localStorage.getItem('credentials');
   let token = "";
   let name = "";
-  if (credentials) {
+  if (credentials && credentials !== null) {
     let { token: t, name: n } = JSON.parse(credentials);
     token = t;
     name = n
   }
+  console.log(token)
+
 
   return (
     <Router>
@@ -36,6 +39,9 @@ const App = () => {
             <Route path="/courses" component={Courses} />
           }
           <Route path="/logout" component={Logout} />
+          {token &&
+            <Route path="/proffesores" component={Proffesores} />
+          }
           <Route path="/" component={NotFound} />
         </Switch>
       </div>
