@@ -1,32 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../redux/store";
 import axios from 'axios';
-import { Proffesor } from './../../interfaces';
-const proffesor = createSlice({
-    name: "proffesor",
+import { Student } from './../../interfaces';
+const student = createSlice({
+    name: "student",
     initialState: {
-        proffesors:
+        students:
             []
     },
     reducers: {
         getProfessors: (state, action) => {
-            state.proffesors = action.payload
+            state.students = action.payload
         }
     }
 })
 
 export const {
     getProfessors
-} = proffesor.actions;
-export default proffesor.reducer
+} = student.actions;
+export default student.reducer
 
-export const reduxProfessorAuth = (user: Proffesor, isLogin: boolean
+export const reduxStudentAuth = (user: Student, isLogin: boolean
 ) => async () => {
     let isAuth = false;
     let requestBody = {
         query: `
               query {
-                loginProffesor(email: "${user.email}", password: "${user.password}") {
+                loginStudent(email: "${user.email}", password: "${user.password}") {
                   userId
                   name
                   token
@@ -39,7 +39,7 @@ export const reduxProfessorAuth = (user: Proffesor, isLogin: boolean
         requestBody = {
             query: `
             mutation {
-                createProffesor(proffesorInput: {email: "${user.email}", password: "${user.password}", name: "${user.name}"}) {
+                createStudent(studentInput: {email: "${user.email}", password: "${user.password}", name: "${user.name}"}) {
                   userId
                   name
                   token
@@ -50,14 +50,21 @@ export const reduxProfessorAuth = (user: Proffesor, isLogin: boolean
         };
     }
     try {
+        console.log('dd')
         let { data } = await axios({
             method: "POST",
             url: "http://localhost:8000/graphql-university",
             data: requestBody
         });
+        console.log(data)
         isAuth = true
+        if (data.errors) return new Error(data.errors[0].message)
+
         if (isLogin) {
-            localStorage.setItem('credentials', JSON.stringify(data.data.loginProffesor))
+            localStorage.setItem('credentials', JSON.stringify(data.data.loginStudent))
+        } else {
+            localStorage.setItem('credentials', JSON.stringify(data.data.createStudent))
+
         }
 
 

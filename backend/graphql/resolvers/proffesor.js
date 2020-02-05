@@ -30,6 +30,7 @@ module.exports = {
     loginProffesor: async ({ email, password }) => {
         console.log('we are here!', email, password)
         const user = await Proffesor.findOne({ email });
+        console.log(user)
         if (!user) throw new Error("user email doesn't exist");
         const isEqual = await bcrypt.compare(password, user.password);
         if (!isEqual) throw new Error("user password doesn't exist");
@@ -37,7 +38,7 @@ module.exports = {
             { email: user.email },
             config.get('jwtPrivateKey'),
             { expiresIn: '1h' })
-        return { userId: user.id, token, tokenExpiration: 1, name: user.name, role: user.role }
+        return { userId: user.id, token, name: user.name, role: user.role }
     },
     proffesorsList: async ({ name }) => {
         let filteredProffesors = []

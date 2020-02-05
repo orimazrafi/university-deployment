@@ -8,38 +8,37 @@ import { Courses } from './pages/Courses/Courses';
 import { NotFound } from './pages/NotFound/NotFound';
 import { Logout } from './pages/Logout/Logout';
 import { Proffesores } from './pages/Proffesores/Proffesores';
-
+import "bootstrap/dist/css/bootstrap.css";
 
 
 const App = () => {
+  const [user, setUser] = React.useState({ name: "", token: "", role: "" })
   const credentials: any = localStorage.getItem('credentials');
-  let token = "";
-  let name = "";
-  if (credentials && credentials !== null) {
-    let { token: t, name: n } = JSON.parse(credentials);
-    token = t;
-    name = n
-  }
-  console.log(token)
+  React.useEffect(() => {
 
+    if (credentials !== null) {
+      const { name, token, role } = JSON.parse(credentials)
+      setUser({ name, token, role })
+    }
+  }, [credentials])
 
   return (
     <Router>
-      <Navbar name={name} token={token} />
+      <Navbar name={user.name} token={user.token} role={user.role} />
       <div className="routes-wrapper">
         <Switch>
           <Route exact path="/" >
             <Redirect to="/home" />
           </Route>
           <Route path="/home" component={Home} />
-          {!token &&
+          {!user.token &&
             <Route path="/auth" component={Auth} />
           }
-          {token &&
+          {user.token &&
             <Route path="/courses" component={Courses} />
           }
           <Route path="/logout" component={Logout} />
-          {token &&
+          {user.token &&
             <Route path="/proffesores" component={Proffesores} />
           }
           <Route path="/" component={NotFound} />

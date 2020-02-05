@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppDispatch } from "../../redux/store";
 import axios from 'axios';
 import { User } from './../../interfaces';
 const user = createSlice({
@@ -27,8 +26,8 @@ export const {
 } = user.actions;
 export default user.reducer
 
-export const reduxAuth = (user: User, isLogin: boolean
-) => async (dispatch: AppDispatch) => {
+export const reduxAdminAuth = (user: User, isLogin: boolean
+) => async () => {
     let isAuth = false;
     let requestBody = {
         query: `
@@ -37,7 +36,6 @@ export const reduxAuth = (user: User, isLogin: boolean
                   userId
                   name
                   token
-                  tokenExpiration
                   role
                 }
               }

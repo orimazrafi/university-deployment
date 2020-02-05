@@ -1,9 +1,11 @@
 const authResolver = require('./auth');
 const proffesorResolver = require('./proffesor');
+const studentResolver = require('./student');
 
 const rootResolver = {
     ...authResolver,
-    ...proffesorResolver
+    ...proffesorResolver,
+    ...studentResolver
 };
 
 module.exports = rootResolver;

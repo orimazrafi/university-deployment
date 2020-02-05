@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import "./Auth.css";
 import { useDispatch } from "react-redux"
-import { reduxAuth } from "../../features/Users/UserSlice"
+import { reduxAdminAuth } from "../../features/Users/UserSlice"
 import { Input } from "../../common/Input/Input";
-
+import { reduxProfessorAuth } from './../../features/Proffesors/ProffesorSlice';
+import { reduxStudentAuth } from "../../features/Students/StudentsSlice";
 
 export const Auth = () => {
     const dispatch = useDispatch()
     const [user, setvalues] = useState({ email: "", password: "", name: "" });
     const [isLogin, setAuth] = useState<boolean>(true)
+    const [role, setRole] = useState('student')
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = event.currentTarget
@@ -21,12 +23,25 @@ export const Auth = () => {
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        let isAuth;
         try {
-            event.preventDefault();
-            const isAuth: any = await dispatch(reduxAuth(user, isLogin));
-            if (isAuth) {
-                window.location.replace("/")
+            if (role === 'admin') {
+                isAuth = await dispatch(reduxAdminAuth(user, isLogin));
+
             }
+            if (role === 'proffesor') {
+                isAuth = await dispatch(reduxProfessorAuth(user, isLogin));
+            }
+            if (role === 'student') {
+                isAuth = await dispatch(reduxStudentAuth(user, isLogin));
+            }
+            if (typeof isAuth === 'boolean' && isAuth) {
+                window.location.replace("/")
+
+            }
+            // if (isAuth) {
+            // }
         } catch (ex) {
             console.log(ex.message)
         }
@@ -36,10 +51,27 @@ export const Auth = () => {
     const handleForm = () => {
         setAuth(prev => !prev)
     }
+    const handleRole = () => {
+        setRole(prev => prev === 'student' ? 'proffesor' : 'student')
+    }
+    const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setRole(e.currentTarget.value)
+
+    }
+
 
     const handleClassName = () => {
-        let className = 'form-actions';
+        let className = 'form-actionsw';
         return className += isLogin ? ' isLogin' : ' signup'
+
+    }
+    const handleDisabled = () => {
+        let disabled = false;
+        if (!isLogin && role === 'proffesor')
+            disabled = true
+        if (!isLogin && role === 'admin')
+            disabled = true;
+        return disabled
 
     }
 
@@ -70,8 +102,16 @@ export const Auth = () => {
             }
 
             <div className={handleClassName()}>
-                <button type="submit">{isLogin ? 'Login' : 'Signup'}</button>
-                <button onClick={handleForm} type="button">change signin method </button>
+                <button type="submit" className="btn btn-primary" disabled={handleDisabled()}
+                >{isLogin ? 'Login' : 'Signup'}</button>
+                <button onClick={handleForm} className="btn btn-primary" type="button">change signin method </button>
+                <select value={role} onChange={handleSelect} >
+                    <option value="admin">Admin</option>
+                    <option value="proffesor">Proffesor</option>
+                    <option value="student">Student</option>
+                </select>
+                <button onSelect={handleRole} type="button"
+                    className="btn btn-primary">{role}</button>
             </div>
         </form>
     )
