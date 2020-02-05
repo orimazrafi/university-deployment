@@ -38,6 +38,7 @@ export const reduxAuth = (user: User, isLogin: boolean
                   name
                   token
                   tokenExpiration
+                  role
                 }
               }
             `
@@ -50,6 +51,8 @@ export const reduxAuth = (user: User, isLogin: boolean
                     userId
                     name
                     token
+                    tokenExpiration
+                    role
                   }
                 }
               `
@@ -62,8 +65,6 @@ export const reduxAuth = (user: User, isLogin: boolean
             data: requestBody
         });
         if (data.errors) return new Error(data.errors[0].message)
-        // console.log(data.errors[0].message)
-        // if (data.data.login === null || data.data.createUser === null) return
         isAuth = true
         if (isLogin) {
             localStorage.setItem('credentials', JSON.stringify(data.data.loginUser))

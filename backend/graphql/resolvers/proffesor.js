@@ -14,24 +14,22 @@ module.exports = {
             const proffesor = new Proffesor({
                 email: args.proffesorInput.email,
                 password: hashedPassword,
-                name: args.proffesorInput.name
+                name: args.proffesorInput.name,
+                role: "proffesor"
             });
-            console.log(proffesor)
-
             const result = await proffesor.save();
             const token = jwt.sign(
                 { email: args.proffesorInput.email },
                 config.get('jwtPrivateKey'),
                 { expiresIn: '1h' })
-            console.log('result:', result)
-            return { userId: result.id, name: result.name, token };
+            return { userId: result.id, name: result.name, token, role: result.role };
         } catch (err) {
             throw err;
         }
     },
-    login: async ({ email, password }) => {
+    loginProffesor: async ({ email, password }) => {
         console.log('we are here!', email, password)
-        const user = await User.findOne({ email });
+        const user = await Proffesor.findOne({ email });
         if (!user) throw new Error("user email doesn't exist");
         const isEqual = await bcrypt.compare(password, user.password);
         if (!isEqual) throw new Error("user password doesn't exist");
@@ -39,6 +37,21 @@ module.exports = {
             { email: user.email },
             config.get('jwtPrivateKey'),
             { expiresIn: '1h' })
-        return { userId: user.id, token, tokenExpiration: 1, name: user.name }
+        return { userId: user.id, token, tokenExpiration: 1, name: user.name, role: user.role }
+    },
+    proffesorsList: async ({ name }) => {
+        let filteredProffesors = []
+        try {
+
+            const proffesors = await Proffesor.find();
+            if (proffesors.length === 0) {
+
+                throw new Error('There are no proffesors yet!')
+            }
+            filteredProffesors = proffesors.map(p => ({ name: p.name, email: p.email }))
+        } catch (ex) {
+            console.log(ex.message)
+        }
+        return filteredProffesors
     }
 };

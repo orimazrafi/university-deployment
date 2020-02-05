@@ -16,7 +16,8 @@ module.exports = {
             const user = new User({
                 email: args.userInput.email,
                 password: hashedPassword,
-                name: args.userInput.name
+                name: args.userInput.name,
+                role: "Admin"
             });
 
             const result = await user.save();
@@ -25,7 +26,7 @@ module.exports = {
                 config.get('jwtPrivateKey'),
                 { expiresIn: '1h' })
             console.log('result:', result)
-            return { userId: result.id, name: result.name, token };
+            return { userId: result.id, name: result.name, token, role: result.role };
         } catch (err) {
             throw err;
         }
@@ -39,6 +40,6 @@ module.exports = {
             { email: user.email },
             config.get('jwtPrivateKey'),
             { expiresIn: '1h' })
-        return { userId: user.id, token, tokenExpiration: 1, name: user.name }
+        return { userId: user.id, token, tokenExpiration: 1, name: user.name, role: user.role }
     }
 };

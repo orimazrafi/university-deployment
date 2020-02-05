@@ -5,18 +5,19 @@ import { Proffesor } from './../../interfaces';
 const proffesor = createSlice({
     name: "proffesor",
     initialState: {
-        userId: null,
-        token: "",
-        name: "",
-        email: ""
+        proffesors:
+            []
+
 
     },
     reducers: {
         credentials: (state, action) => {
-            state.userId = action.payload.userId;
-            state.name = action.payload.name;
-            state.token = action.payload.token;
+
         },
+        getProfessors: (state, action) => {
+            state.proffesors = action.payload
+
+        }
 
 
     }
@@ -24,15 +25,13 @@ const proffesor = createSlice({
 
 export const {
     credentials,
+    getProfessors
 } = proffesor.actions;
 export default proffesor.reducer
 
-export const reduxProfessoerAuth = (user: Proffesor, isLogin: boolean
+export const reduxProfessorAuth = (user: Proffesor, isLogin: boolean
 ) => async (dispatch: AppDispatch) => {
-    console.log(user, isLogin, 's')
     let isAuth = false;
-
-
     let requestBody = {
         query: `
                 mutation {
@@ -40,11 +39,11 @@ export const reduxProfessoerAuth = (user: Proffesor, isLogin: boolean
                     userId
                     name
                     token
+                    role
                   }
                 }
               `
     };
-    // }
     try {
         let { data } = await axios({
             method: "POST",
@@ -52,18 +51,39 @@ export const reduxProfessoerAuth = (user: Proffesor, isLogin: boolean
             data: requestBody
         });
         if (data.errors) throw new Error(data.errors[0].message);
-
-
-        // console.log('data', data['errors'])
-        // if (data.data.login === null || data.data.createProffesor === null) 
-        // console.log('data', data)
         isAuth = true
+        console.log(data, isLogin)
         // if (isLogin) {
-        //     localStorage.setItem('credentials', JSON.stringify(data.data.login))
+        //     localStorage.setItem('credentials', JSON.stringify(data.data.loginProffesor))
         // } else {
-        //     localStorage.setItem('credentials', JSON.stringify(data.data.createUser))
+        localStorage.setItem('credentials', JSON.stringify(data.data.createProffesor))
         // }
-
+    } catch (error) {
+        console.error('error', error);
+    }
+    return isAuth
+}
+export const reduxGetProfessors = (
+) => async (dispatch: AppDispatch) => {
+    let isAuth = false;
+    let requestBody = {
+        query: `
+            query {
+                proffesorsList(name: "ori mazrafi") {
+                    name
+                    email
+            }
+          }
+              `
+    };
+    try {
+        let { data } = await axios({
+            method: "POST",
+            url: "http://localhost:8000/graphql-university",
+            data: requestBody
+        });
+        if (!data.data.proffesorsList) throw new Error('there are no user')
+        dispatch(getProfessors(data.data.proffesorsList))
     } catch (error) {
         console.error('error', error);
     }
