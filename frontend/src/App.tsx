@@ -9,16 +9,16 @@ import { NotFound } from './pages/NotFound/NotFound';
 import { Logout } from './pages/Logout/Logout';
 import { Proffesores } from './pages/Proffesores/Proffesores';
 import "bootstrap/dist/css/bootstrap.css";
+import { Profile } from './pages/Profile/Profile';
 
 
 const App = () => {
-  const [user, setUser] = React.useState({ name: "", token: "", role: "" })
+  const [user, setUser] = React.useState({ name: "", token: "", role: "", userId: "" })
   const credentials: any = localStorage.getItem('credentials');
   React.useEffect(() => {
-
     if (credentials !== null) {
-      const { name, token, role } = JSON.parse(credentials)
-      setUser({ name, token, role })
+      const { name, token, role, userId } = JSON.parse(credentials)
+      setUser({ name, token, role, userId })
     }
   }, [credentials])
 
@@ -40,6 +40,11 @@ const App = () => {
           <Route path="/logout" component={Logout} />
           {user.token &&
             <Route path="/proffesores" component={Proffesores} />
+          }
+          {user.token &&
+            <Route path="/profile" >
+              <Profile name={user.name} role={user.role} userId={user.userId} />
+            </Route>
           }
           <Route path="/" component={NotFound} />
         </Switch>

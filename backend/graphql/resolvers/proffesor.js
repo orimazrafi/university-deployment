@@ -54,5 +54,12 @@ module.exports = {
             console.log(ex.message)
         }
         return filteredProffesors
+    },
+    getProffesor: async ({ proffesorId }) => {
+        console.log('proffesorId', proffesorId)
+        const proffesor = await Proffesor.findById(proffesorId);
+        console.log(proffesor)
+        return { userId: proffesor.id, name: proffesor.name, token: "token", role: proffesor.role }
+
     }
 };

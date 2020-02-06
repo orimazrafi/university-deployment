@@ -5,18 +5,23 @@ import { Proffesor } from './../../interfaces';
 const proffesor = createSlice({
     name: "proffesor",
     initialState: {
-        proffesors:
-            []
+        proffesors: [],
+        user: {}
     },
     reducers: {
         getProfessors: (state, action) => {
             state.proffesors = action.payload
-        }
+        },
+        setProfessor: (state, action) => {
+            state.user = action.payload
+        },
+
     }
 })
 
 export const {
-    getProfessors
+    getProfessors,
+    setProfessor
 } = proffesor.actions;
 export default proffesor.reducer
 
@@ -88,6 +93,36 @@ export const reduxGetProfessors = (
         });
         if (!data.data.proffesorsList) throw new Error('there are no user')
         dispatch(getProfessors(data.data.proffesorsList))
+    } catch (error) {
+        console.error('error', error);
+    }
+    return isAuth
+}
+export const reduxSetProfessor = (proffesorId: string
+) => async (dispatch: AppDispatch) => {
+    let isAuth = false;
+    let requestBody = {
+        query: `
+            query {
+                getProffesor(proffesorId: "${proffesorId}") {
+                    userId
+                    name
+                    token 
+                    role 
+            }
+          }
+              `
+    };
+    try {
+        let { data } = await axios({
+            method: "POST",
+            url: "http://localhost:8000/graphql-university",
+            data: requestBody
+        });
+        console.log(data)
+
+        if (!data.data.getProffesor) throw new Error('there are no user')
+        dispatch(setProfessor(data.data.getProffesor))
     } catch (error) {
         console.error('error', error);
     }

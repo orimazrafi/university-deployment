@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Input = ({ value, handleChange, name, placeholder, label, type = "type" }: any) => {
+export const Input = ({ value, handleChange, name, placeholder, label, type }: any) => {
     return (<div className="form-group row">
         <label>
             {label}:

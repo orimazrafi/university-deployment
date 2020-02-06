@@ -6,6 +6,7 @@ import { ProffesorsList } from "../../components/ProffesorsList/ProffesorsList";
 import "./Proffesores.css"
 
 export const Proffesores = () => {
+
     const dispatch = useDispatch()
     const { proffesors } = useSelector((state: any) => state.proffesor)
 

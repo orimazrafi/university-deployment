@@ -30,7 +30,7 @@ export const Navbar = ({ name, token, role }: { name: string, token: string, rol
                         <NavLink to="/logout">Logout</NavLink>
                     </div>
                     <div className="main-navbar__item">
-                        <NavLink to="/me">{role} {name}</NavLink>
+                        <NavLink to="/profile">{role} {name}</NavLink>
                     </div>
                 </React.Fragment>
             }
