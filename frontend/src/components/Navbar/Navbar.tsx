@@ -19,9 +19,11 @@ export const Navbar = ({ name, token, role }: { name: string, token: string, rol
                             <NavLink to="/proffesores">Proffesores</NavLink>
                         </div>
                     }
-                    <div className="main-navbar__item navbar__item__courses">
-                        <NavLink to="/courses">Courses</NavLink>
-                    </div>
+                    {role !== 'Proffesor' &&
+                        <div className="main-navbar__item navbar__item__courses">
+                            <NavLink to="/courses">Courses</NavLink>
+                        </div>
+                    }
                 </React.Fragment>
             }
             {token &&
@@ -30,8 +32,14 @@ export const Navbar = ({ name, token, role }: { name: string, token: string, rol
                         <NavLink to="/logout">Logout</NavLink>
                     </div>
                     <div className="main-navbar__item">
-                        <NavLink to="/profile">{role} {name}</NavLink>
+                        <NavLink to="/profile">courses</NavLink>
                     </div>
+                    {role === 'Proffesor' &&
+
+                        <div className="main-navbar__item">
+                            <NavLink to="/proffesor-courses">me</NavLink>
+                        </div>
+                    }
                 </React.Fragment>
             }
         </div>

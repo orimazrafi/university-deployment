@@ -9,8 +9,8 @@ export const ProffesorsList = ({ proffesorsList }: any) => {
                 <div className="card" key={proffesor.email}>
                     <img src={defaultImg} className="card-img-top" height="200" width="100" alt="proffesor" />
                     <div className="card-body">
-                        <h5 className="card-title">name : {proffesor.name}</h5>
-                        <h5 className="card-title">email : {proffesor.email}</h5>
+                        <p className="card-title">name : {proffesor.name}</p>
+                        <p className="card-title">email : {proffesor.email}</p>
                     </div>
                 </div>
             )}

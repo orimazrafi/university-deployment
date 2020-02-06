@@ -5,11 +5,11 @@ import "./Profile.css";
 export const Profile = ({ role, name, userId }: { role: string, name: string, userId: string }) => {
     return (
         <div className="profile__container">
-            {role === 'admin' && <div>Admin</div>}
-            {role === 'proffesor' && (
+            {role === 'Admin' && <div>Admin</div>}
+            {role === 'Proffesor' && (
                 <ProffesorProfile proffesorId={userId} />
             )}
-            {role === 'student' && <div>Student</div>}
+            {role === 'Student' && <div>Student</div>}
         </div>
     )
 }

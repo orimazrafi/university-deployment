@@ -15,7 +15,7 @@ module.exports = {
                 email: args.proffesorInput.email,
                 password: hashedPassword,
                 name: args.proffesorInput.name,
-                role: "proffesor"
+                role: "Proffesor"
             });
             const result = await proffesor.save();
             const token = jwt.sign(

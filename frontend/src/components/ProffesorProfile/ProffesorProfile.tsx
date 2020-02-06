@@ -1,11 +1,16 @@
 import React from "react";
 import "./ProffesorProfile.css"
 import { Input } from './../../common/Input/Input';
-import { reduxCreateCourse, reduxGetCourses } from "../../features/Courses/CourseSlice";
+import { reduxCreateCourse, reduxGetProffesorCourses } from "../../features/Courses/CourseSlice";
 import { reduxSetProfessor } from "../../features/Proffesors/ProffesorSlice";
 import { useDispatch, useSelector } from 'react-redux';
+import { defaultImg, defaultCourseImg } from "../../helpers";
 export const ProffesorProfile = ({ proffesorId }: { proffesorId: string }) => {
-    const { courses } = useSelector((state: any) => state.course)
+    const { proffesorCourses } = useSelector((state: any) => state.course)
+    const { user } = useSelector((state: any) => state.proffesor)
+    React.useEffect(() => {
+        onLoad()
+    }, [])
 
     const dispatch = useDispatch()
     const [toggleCourses, setToggleCourses] = React.useState(false);
@@ -15,14 +20,15 @@ export const ProffesorProfile = ({ proffesorId }: { proffesorId: string }) => {
         description: "",
         proffesorId
     });
-    React.useEffect(() => {
 
-    }, [])
-    const handleToggle = async () => {
-        setToggleCourses(prevState => !prevState)
-        await dispatch(reduxGetCourses(proffesorId))
+
+    const onLoad = async () => {
+        await dispatch(reduxGetProffesorCourses(proffesorId))
         await dispatch(reduxSetProfessor(proffesorId))
 
+    }
+    const handleToggle = async () => {
+        setToggleCourses(prevState => !prevState)
 
     }
 
@@ -44,10 +50,24 @@ export const ProffesorProfile = ({ proffesorId }: { proffesorId: string }) => {
     return (
         <div className="proffesorProfile__wrapper">
             <div className="proffesorProfile__container">
-                <button className="btn btn-primary" onClick={handleToggle}>toggle</button>
+                <button className="btn btn-primary" onClick={handleToggle}>Toggle</button>
                 {toggleCourses ?
-                    <div>your profile+{courses.length > 0 &&
-                        courses.map((c: any) => <div key={c.name}>{c.name}</div>)}</div>
+
+                    <div className="professor__profile__courses">
+
+                        {proffesorCourses.length > 0 &&
+                            proffesorCourses.map((c: any) => (
+                                <div className="card" key={c.name}>
+                                    <img src={defaultCourseImg} className="card-img-top" height="200" width="100" alt="proffesor" />
+                                    <div className="card-body">
+                                        <p className="card-title">name : {c.name}</p>
+                                        <p className="card-title">points : {c.points}</p>
+                                        <p className="card-title">description : {c.description}</p>
+                                        <button className="btn btn-primary">Edit</button>
+                                    </div>
+                                </div>
+                            ))}
+                    </div>
                     :
                     <form onSubmit={handleSubmit} className="form-container">
                         <Input

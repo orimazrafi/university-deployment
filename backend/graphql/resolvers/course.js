@@ -25,11 +25,27 @@ module.exports = {
             throw err;
         }
     },
-    getCourses: async ({ proffesorId }) => {
+    getProffesorCourses: async ({ proffesorId }) => {
         let courses = []
         try {
 
             courses = await Course.find({ proffesorId });
+            console.log(courses)
+            if (courses.length === 0) {
+
+                throw new Error('There are no courses yet!')
+            }
+            // filteredProffesors = proffesors.map(p => ({ name: p.name, email: p.email }))
+        } catch (ex) {
+            console.log(ex.message)
+        }
+        return courses
+    },
+    getCourses: async ({ studentId }) => {
+        let courses = []
+        try {
+
+            courses = await Course.find();
             console.log(courses)
             if (courses.length === 0) {
 

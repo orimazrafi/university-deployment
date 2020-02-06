@@ -10,6 +10,7 @@ import { Logout } from './pages/Logout/Logout';
 import { Proffesores } from './pages/Proffesores/Proffesores';
 import "bootstrap/dist/css/bootstrap.css";
 import { Profile } from './pages/Profile/Profile';
+import { ProffesorCourses } from './pages/ProffesorCourses/ProffesorCourses';
 
 
 const App = () => {
@@ -34,8 +35,10 @@ const App = () => {
           {!user.token &&
             <Route path="/auth" component={Auth} />
           }
-          {user.token &&
-            <Route path="/courses" component={Courses} />
+          {user.token && user.role !== "Proffesor" &&
+            <Route path="/courses" >
+              <Courses userId={user.userId} />
+            </Route>
           }
           <Route path="/logout" component={Logout} />
           {user.token &&
@@ -44,6 +47,11 @@ const App = () => {
           {user.token &&
             <Route path="/profile" >
               <Profile name={user.name} role={user.role} userId={user.userId} />
+            </Route>
+          }
+          {user.token && user.role === 'Proffesor' &&
+            <Route path="/proffesor-courses" >
+              <ProffesorCourses proffesorId={user.userId} />
             </Route>
           }
           <Route path="/" component={NotFound} />

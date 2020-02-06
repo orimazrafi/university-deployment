@@ -79,14 +79,15 @@ type RootQuery {
   loginProffesor(email:String!, password:String!): Proffesor
   loginStudent(email:String!, password:String!): Student
   proffesorsList(name: String!): [Proffesors]
-  getCourses(proffesorId: ID!): [Courses]
+  getProffesorCourses(proffesorId: ID!): [Courses]
   getProffesor(proffesorId: ID!): Proffesor
+  getCourses(studentId: ID!): [Course]
 }
 type RootMutation {
     createUser(userInput: UserInput): User
     createStudent(studentInput: StudentInput): Student
     createProffesor(proffesorInput: ProffesorInput): Proffesor
-    createCourse(courseInput: CourseInput): Course
+    createCourse(courseInput: CourseInput): [Course]
 }
 schema {
     query: RootQuery

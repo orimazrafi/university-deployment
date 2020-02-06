@@ -5,9 +5,13 @@ import { AppDispatch } from "../../redux/store";
 const course = createSlice({
     name: "course",
     initialState: {
+        proffesorCourses: [],
         courses: []
     },
     reducers: {
+        setProffesorCourses: (state, action) => {
+            state.proffesorCourses = action.payload
+        },
         setCourses: (state, action) => {
             state.courses = action.payload
         }
@@ -15,6 +19,7 @@ const course = createSlice({
 })
 
 export const {
+    setProffesorCourses,
     setCourses
 } = course.actions;
 export default course.reducer
@@ -50,13 +55,13 @@ export const reduxCreateCourse = (course: Course
     // return isAuth
 }
 
-export const reduxGetCourses = (proffesorId: string
+export const reduxGetProffesorCourses = (proffesorId: string
 ) => async (dispatch: AppDispatch) => {
     let isAuth = false;
     let requestBody = {
         query: `
             query {
-                getCourses(proffesorId: "${proffesorId}") {
+                getProffesorCourses(proffesorId: "${proffesorId}") {
                     name
                     points 
                     description 
@@ -72,7 +77,7 @@ export const reduxGetCourses = (proffesorId: string
             data: requestBody
         });
 
-        await dispatch(setCourses(data.data.getCourses))
+        await dispatch(setProffesorCourses(data.data.getProffesorCourses))
         requestBody = {
             query: `
                 query {
@@ -86,6 +91,51 @@ export const reduxGetCourses = (proffesorId: string
               }
                   `
         };
+
+
+
+    } catch (error) {
+        console.error('ernjknror', error);
+    }
+    return isAuth
+}
+export const reduxGetCourses = (studentId: string
+) => async (dispatch: AppDispatch) => {
+    let isAuth = false;
+    let requestBody = {
+        query: `
+            query {
+                getCourses(studentId: "${studentId}") {
+                    name
+                    points 
+                    description 
+                    proffesorId 
+            }
+          }
+              `
+    };
+    try {
+        let { data } = await axios({
+            method: "POST",
+            url: "http://localhost:8000/graphql-university",
+            data: requestBody
+        });
+        console.log(data)
+
+        await dispatch(setCourses(data.data.getCourses))
+        // requestBody = {
+        //     query: `
+        //         query {
+        //             getProffesor(proffesorId: "${proffesorId}") {
+        //                 userId
+        //                 name
+        //                 token
+        //                 role
+
+        //         }
+        //       }
+        //           `
+        // };
 
 
 
