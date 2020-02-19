@@ -9,7 +9,13 @@
     padding: 15px;
 }
 
-.main-navbar__item {
+.main-navbar__item__me {
+    margin-right: 10px;
+    ;
+}
+
+.main-navbar__item,
+.main-navbar__activity {
     margin-left: 10px;
 
 }
@@ -18,13 +24,31 @@
     margin-right: auto
 }
 
+.main-navbar__item__me {
+    margin-left: auto
+}
+
 .main-navbar__item a:hover .main-navbar__item a:active,
 .main-navbar__item a.active {
-    color: rgb(253, 253, 1);
+
+    color: #673AB7;
+    text-decoration: none;
+
 }
 
 a {
-    text-decoration: none;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
+    background-image: none;
+}
+
+a:hover {
+    text-decoration: none;
+
+}
+.navbar__my__profile__role__name p{
+font-size: 18px;
+}
+.navbar__my__profile__role__name b{
+font-size: 26px;
 }

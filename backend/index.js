@@ -1,12 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
+const { graphqlUploadExpress } = require('graphql-upload')
 const mongoose = require('mongoose');
+var multer = require('multer')
+
 const config = require('config')
 const grapQlSchema = require('./graphql/schema')
 const rootResolvers = require('./graphql/resolvers/index')
 
 const app = express();
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+})
+var upload = multer({ storage: storage }).single('file')
 
 
 app.use(bodyParser.json());
@@ -19,16 +32,19 @@ app.use((req, res, next) => {
 })
 
 
+
 app.use(bodyParser.json());
 
 
 
 
-app.use('/graphql-university', graphqlHttp({
-    schema: grapQlSchema,
-    rootValue: rootResolvers,
-    graphiql: true
-}));
+app.use('/graphql-university',
+    graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
+    graphqlHttp({
+        schema: grapQlSchema,
+        rootValue: rootResolvers,
+        graphiql: true
+    }))
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -42,4 +58,4 @@ mongoose.set('useUnifiedTopology', true); mongoose.connect(
     ).catch(err => {
         console.log(err)
     })
-
+module.exports.upload = upload

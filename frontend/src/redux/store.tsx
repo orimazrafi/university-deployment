@@ -2,14 +2,16 @@
 import {
     configureStore,
 } from "@reduxjs/toolkit";
-import userSlice from "../features/Users/UserSlice";
+import adminSlice from "../features/Admin/AdminSlice";
 import proffesorSlice from "../features/Proffesors/ProffesorSlice";
 import courseSlice from "../features/Courses/CourseSlice";
+import studentSlice from "../features/Students/StudentsSlice";
 import thunk from "redux-thunk";
 const store = configureStore({
     reducer: {
-        user: userSlice,
+        admin: adminSlice,
         proffesor: proffesorSlice,
+        student: studentSlice,
         course: courseSlice
     },
     middleware: [thunk]

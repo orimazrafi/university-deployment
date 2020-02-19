@@ -1,12 +1,12 @@
 import React from "react";
 
 export const Input = ({ value, handleChange, name, placeholder, label, type }: any) => {
-    return (<div className="form-group row">
+    return (<div className="form-group">
         <label>
-            {label}:
+            {label}
         </label>
         <input
-            className="form-control"
+            className="input-block"
             type={type}
             placeholder={placeholder}
             name={name}

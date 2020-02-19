@@ -1,47 +1,51 @@
-import React, { useState } from "react";
-import "./Auth.css";
-import { useDispatch } from "react-redux"
-import { reduxAdminAuth } from "../../features/Users/UserSlice"
+import React, { useState, useCallback } from "react";
+
 import { Input } from "../../common/Input/Input";
-import { reduxProfessorAuth } from './../../features/Proffesors/ProffesorSlice';
-import { reduxStudentAuth } from "../../features/Students/StudentsSlice";
+import { UseCloudinaryUpload } from './../../hooks/UseCloudinaryUpload';
+import { UseFormData } from './../../hooks/UseFormData';
+import { UseChangeInput } from "../../hooks/UseChangeInput";
+import { DropzoneImage } from "../../components/DropzoneImage/DropzoneImage";
+import { student, admin, proffesor } from "../../helpers";
+import { UseProffesorAuth } from './../../hooks/UseProffesorAuth';
+import { UseStudentAuth } from './../../hooks/UseStudentAuth';
+import { UseAdminAuth } from "../../hooks/UseAdminAuth";
+import "./Auth.css";
 
 export const Auth = () => {
-    const dispatch = useDispatch()
-    const [user, setvalues] = useState({ email: "", password: "", name: "" });
+    const [user, setvalues] = useState({ email: "", password: "", name: "", image: "" });
+    const [cloudinaryImage, setCloudinaryImage] = useState("default_avatar_k049ck")
     const [isLogin, setAuth] = useState<boolean>(true)
-    const [role, setRole] = useState('student')
+    const [role, setRole] = useState(student)
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value, name } = event.currentTarget
-        setvalues(prevValue => (
-            {
-                ...prevValue,
-                [name]: value
-            }
-        ))
+
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+        const formData = UseFormData(acceptedFiles[0])
+        const { data } = await UseCloudinaryUpload(formData)
+        setCloudinaryImage(() => (data.public_id))
+    }, [])
+
+    const handleChange = (event: React.ChangeEvent<HTMLFormElement>) => {
+        UseChangeInput(event, setvalues)
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         let isAuth;
         try {
-            if (role === 'admin') {
-                isAuth = await dispatch(reduxAdminAuth(user, isLogin));
+            if (role === admin) {
+                isAuth = await UseAdminAuth(user, isLogin)
+            }
+            if (role === proffesor) {
 
+                isAuth = await UseProffesorAuth(user, isLogin, proffesor)
             }
-            if (role === 'proffesor') {
-                isAuth = await dispatch(reduxProfessorAuth(user, isLogin));
-            }
-            if (role === 'student') {
-                isAuth = await dispatch(reduxStudentAuth(user, isLogin));
+            if (role === student) {
+                isAuth = await UseStudentAuth(user, isLogin, cloudinaryImage)
             }
             if (typeof isAuth === 'boolean' && isAuth) {
                 window.location.replace("/")
-
             }
-            // if (isAuth) {
-            // }
+
         } catch (ex) {
             console.log(ex.message)
         }
@@ -49,13 +53,11 @@ export const Auth = () => {
     }
 
     const handleForm = () => {
-        setAuth(prev => !prev)
+        setAuth(prevState => !prevState)
     }
-    const handleRole = () => {
-        setRole(prev => prev === 'student' ? 'proffesor' : 'student')
-    }
+
     const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setRole(e.currentTarget.value)
+        setRole(e.target.value)
 
     }
 
@@ -67,16 +69,18 @@ export const Auth = () => {
     }
     const handleDisabled = () => {
         let disabled = false;
-        if (!isLogin && role === 'proffesor')
+        if (!isLogin && role === proffesor)
             disabled = true
-        if (!isLogin && role === 'admin')
+        if (!isLogin && role === admin)
             disabled = true;
         return disabled
 
     }
 
+
     return (
         <form onSubmit={handleSubmit} className="form-container">
+
             <Input
                 label="Email"
                 value={user.email}
@@ -92,26 +96,33 @@ export const Auth = () => {
                 placeholder="password..."
                 type="password" />
             {!isLogin &&
-                <Input
-                    label="Name"
-                    value={user.name}
-                    handleChange={handleChange}
-                    name="name"
-                    placeholder="name..."
-                    type="text" />
+                <React.Fragment>
+
+                    < DropzoneImage
+                        cloudinaryImage={cloudinaryImage}
+                        onDrop={onDrop}
+                        image={user.image}
+                    />
+
+                    <Input
+                        label="Name"
+                        value={user.name}
+                        handleChange={handleChange}
+                        name="name"
+                        placeholder="name..."
+                        type="text" />
+                </React.Fragment>
             }
 
             <div className={handleClassName()}>
-                <button type="submit" className="btn btn-primary" disabled={handleDisabled()}
+                <button type="submit" className="btn-secondary" disabled={handleDisabled()}
                 >{isLogin ? 'Login' : 'Signup'}</button>
-                <button onClick={handleForm} className="btn btn-primary" type="button">change signin method </button>
-                <select value={role} onChange={handleSelect} >
-                    <option value="admin">Admin</option>
-                    <option value="proffesor">Proffesor</option>
-                    <option value="student">Student</option>
+                <button onClick={handleForm} className="btn-warning" type="button"> method </button>
+                <select value={role} onChange={handleSelect} className="role__select" >
+                    <option value={admin}>Admin</option>
+                    <option value={proffesor}>Proffesor</option>
+                    <option value={student}>Student</option>
                 </select>
-                <button onSelect={handleRole} type="button"
-                    className="btn btn-primary">{role}</button>
             </div>
         </form>
     )

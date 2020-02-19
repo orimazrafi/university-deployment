@@ -47,3 +47,8 @@
     background: #01a7a7;
     border-color: #01a7a7;
 }
+
+.role__select {
+    display: inline-block;
+    height: 3.15rem;
+}

@@ -1,104 +1,189 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../redux/store";
 import axios from 'axios';
-import { Student } from './../../interfaces';
+import { graphqlconfiguration } from "../../helpers";
+
 const student = createSlice({
     name: "student",
     initialState: {
-        students:
-            []
+        students: [],
+        student: {},
+        studentCourses: []
     },
     reducers: {
-        getProfessors: (state, action) => {
+        setStudents: (state, action) => {
             state.students = action.payload
-        }
+        },
+        setStudent: (state, action) => {
+            state.student = action.payload
+        },
+        setStudentCourses: (state, action) => {
+            state.studentCourses = action.payload
+        },
+
     }
 })
 
 export const {
-    getProfessors
+
+    setStudent,
+    setStudents,
+    setStudentCourses
+
 } = student.actions;
 export default student.reducer
 
-export const reduxStudentAuth = (user: Student, isLogin: boolean
-) => async () => {
-    let isAuth = false;
-    let requestBody = {
-        query: `
-              query {
-                loginStudent(email: "${user.email}", password: "${user.password}") {
-                  userId
-                  name
-                  token
-                  role
-                }
-              }
-            `
-    };
-    if (!isLogin) {
-        requestBody = {
-            query: `
-            mutation {
-                createStudent(studentInput: {email: "${user.email}", password: "${user.password}", name: "${user.name}"}) {
-                  userId
-                  name
-                  token
-                  role
-                }
-              }
-              `
-        };
-    }
-    try {
-        console.log('dd')
-        let { data } = await axios({
-            method: "POST",
-            url: "http://localhost:8000/graphql-university",
-            data: requestBody
-        });
-        console.log(data)
-        isAuth = true
-        if (data.errors) return new Error(data.errors[0].message)
-
-        if (isLogin) {
-            localStorage.setItem('credentials', JSON.stringify(data.data.loginStudent))
-        } else {
-            localStorage.setItem('credentials', JSON.stringify(data.data.createStudent))
-
-        }
 
 
-    } catch (error) {
-        console.error('error', error);
-    }
-    return isAuth
-}
-
-export const reduxGetProfessors = (
+export const reduxGetStudents = (
 ) => async (dispatch: AppDispatch) => {
-    let isAuth = false;
+    let isSuccess = false;
     let requestBody = {
         query: `
             query {
-                proffesorsList(name: "ori mazrafi") {
+                getStudents(name: "ori mazrafi") {
                     name
                     email
+                    role
+                    registerCourses
+                    publicId
             }
           }
               `
     };
     try {
-        let { data } = await axios({
-            method: "POST",
-            url: "http://localhost:8000/graphql-university",
-            data: requestBody
-        });
-        if (!data.data.proffesorsList) throw new Error('there are no user')
-        dispatch(getProfessors(data.data.proffesorsList))
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+        if (!data.data.getStudents) return new Error(data.errors[0].message)
+        dispatch(setStudents(data.data.getStudents))
     } catch (error) {
-        console.error('error', error);
+        return new Error(error.message)
     }
-    return isAuth
+    isSuccess = true
+    return isSuccess
 }
+
+export const reduxSetStudent = (studentId: string
+) => async (dispatch: AppDispatch) => {
+    let requestBody = {
+        query: `
+                query {
+                    getStudent(studentId: "${studentId}") {
+                        userId
+                        name
+                        email 
+                        role 
+                        publicId
+                }
+              }
+                  `
+    };
+    try {
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+        if (!data.data.getStudent) return console.error(data.errors[0].message)
+        dispatch(setStudent(data.data.getStudent))
+    } catch (error) {
+        return console.error(error.message)
+
+    }
+}
+
+export const reduxGetStudentCourses = (studentId: string
+) => async (dispatch: AppDispatch) => {
+    let requestBody = {
+        query: `
+                query {
+                    getStudentCourses(studentId: "${studentId}") {
+                        courseId
+                        name
+                        points
+                        description
+                        proffesorId
+                        registerStudents
+                        publicId
+                }
+              }
+                  `
+    };
+    try {
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+        if (!data.data.getStudentCourses) return console.error(data.errors[0].message)
+        await dispatch(setStudentCourses(data.data.getStudentCourses))
+    } catch (error) {
+        return console.error(error.message)
+    }
+}
+
+
+
+export const reduxRegisterCourseInStudent = (studentId: string, courseId: string
+
+) => async (dispatch: AppDispatch) => {
+    let requestBody = {
+        query: `
+                mutation {
+                    registerCourseInStudent( studentId: "${studentId}", courseId:  "${courseId}") {
+                        studentId
+                        publicId
+                        name
+                        role 
+                        registerCourses
+                    }
+                  }
+                `
+    };
+    try {
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+        if (!data.data.registerCourseInStudent) return console.error(data.errors[0].message)
+        await dispatch(setStudents(data.data.registerCourseInStudent))
+    } catch (error) {
+        return console.error(error.message)
+
+    }
+}
+export const reduxUpdateStudent = (userObj: any
+) => async (dispatch: AppDispatch) => {
+    let requestBody = {
+        query: `
+                mutation {
+                    updateStudent( studentId: "${userObj.userId}", name: "${userObj.name}",
+                      publicId: "${userObj.publicId}") {
+                        userId
+                        name
+                        role 
+                        registerCourses
+                        publicId
+                    }
+                  }
+                `
+    };
+    try {
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+
+        if (!data.data.updateStudent) return console.error(data.errors[0].message)
+        await dispatch(setStudent(data.data.updateStudent))
+    } catch (error) {
+        return console.error(error.message)
+    }
+}
+
+
+
+
+
 
 

@@ -1,89 +1,155 @@
-// const bcrypt = require('bcryptjs');
-// const jwt = require("jsonwebtoken");
-// const config = require('config')
 const Course = require('../../models/course');
-
-module.exports = {
-    createCourse: async args => {
+const Proffesor = require('../../models/proffesor')
+let filteredCourses = []
+let courses;
+let proffesorObject = {
+    createCourse: async ({ courseInput }) => {
+        let result;
         try {
-            const existingCourse = await Course.findOne({ name: args.courseInput.name });
-            if (existingCourse) {
-                return new Error('Course exists already.');
-            }
-            const course = new Course({
-                name: args.courseInput.name,
-                description: args.courseInput.description,
-                points: args.courseInput.points,
-                proffesorId: args.courseInput.proffesorId
+            const existingCourse = await Course.findOne({ name: courseInput.name });
+            if (existingCourse) return new Error('Course exists already.');
+            if (courseInput.points < 1 || courseInput.points > 6) return new Error("points needs to be between 1-6.")
+            if (courseInput.description.length < 5) return new Error("description must be in length of at least 5 characters.")
+            if (courseInput.publicId === "") return new Error("You must upload course image.")
+            let course = new Course({
+                name: courseInput.name,
+                description: courseInput.description,
+                points: courseInput.points,
+                proffesorId: courseInput.proffesorId,
+                registerStudents: [],
+                publicId: courseInput.publicId
             });
-            const result = await course.save();
-            return {
-                courseId: result.id, name: result.name, points: result.points,
-                description: result.description, proffesorId: result.proffesorId
-            };
+            result = await course.save();
+            course = await Proffesor.findByIdAndUpdate(
+                { _id: courseInput.proffesorId },
+                { $push: { registerCourses: result._id } }, { new: true }
+            )
         } catch (err) {
             throw err;
         }
+        return result._id;
+    },
+    updateCourse: async ({ courseUpdateInput }) => {
+        console.log(courseUpdateInput)
+        let result;
+        let course;
+        try {
+
+            course = await Course.findByIdAndUpdate({ _id: courseUpdateInput.courseId },
+                {
+                    $set: {
+                        name: courseUpdateInput.name,
+                        points: courseUpdateInput.points,
+                        description: courseUpdateInput.description,
+                        publicId: courseUpdateInput.publicId,
+                    }
+                }, { new: true }
+            );
+            console.log(course)
+            if (!course) return new Error('problem with course updating.')
+
+
+
+            // await course.save()
+            // updatedProffesor = {
+            //     userId: proffesorId,
+            //     name,
+            //     publicId,
+            //     email: proffesor.email,
+            //     registerCourses: proffesor.registerCourses
+            // }
+            // if (existingCourse) return new Error('Course exists already.');
+            // if (courseInput.points < 1 || courseInput.points > 6) return new Error("points needs to be between 1-6.")
+            // if (courseInput.description.length < 5) return new Error("description must be in length of at least 5 characters.")
+            // if (courseInput.publicId === "") return new Error("You must upload course image.")
+            // let course = new Course({
+            //     name: courseInput.name,
+            //     description: courseInput.description,
+            //     points: courseInput.points,
+            //     proffesorId: courseInput.proffesorId,
+            //     registerStudents: [],
+            //     publicId: courseInput.publicId
+            // });
+            // result = await course.save();
+            // course = await Proffesor.findByIdAndUpdate(
+            //     { _id: courseInput.proffesorId },
+            //     { $push: { registerCourses: result._id } }, { new: true }
+            // )
+        } catch (err) {
+            throw err;
+        }
+        console.log('courseUpdateInput', courseUpdateInput.courseId)
+        return { _id: courseUpdateInput.courseId };
     },
     getProffesorCourses: async ({ proffesorId }) => {
-        let courses = []
         try {
-
             courses = await Course.find({ proffesorId });
-            console.log(courses)
-            if (courses.length === 0) {
+            filteredCourses = courses.map(course => (
+                course.generatecourseToReturn(course)
+            ));
 
-                throw new Error('There are no courses yet!')
-            }
-            // filteredProffesors = proffesors.map(p => ({ name: p.name, email: p.email }))
         } catch (ex) {
-            console.log(ex.message)
+            return new Error(ex.message)
         }
-        return courses
+
+        return filteredCourses
     },
     getCourses: async ({ studentId }) => {
-        let courses = []
         try {
-
             courses = await Course.find();
-            console.log(courses)
-            if (courses.length === 0) {
-
-                throw new Error('There are no courses yet!')
-            }
-            // filteredProffesors = proffesors.map(p => ({ name: p.name, email: p.email }))
+            if (courses.length === 0) throw new Error('There are no courses yet!')
+            filteredCourses = courses.map(course => (
+                course.generatecourseToReturn(course)
+            ))
         } catch (ex) {
-            console.log(ex.message)
+            return new Error(ex.message)
         }
-        return courses
-    }
+        return filteredCourses
+    },
+    registerStudentInCourses: async ({ courseId, studentId }) => {
+        try {
+            course = await Course.findByIdAndUpdate(
+                { _id: courseId },
+                { $push: { registerStudents: studentId } }, { new: true }
+            )
+            courses = await Course.find()
+            filteredCourses = courses.map(course => (
+                course.generatecourseToReturn(course)
+            )
+            )
 
-    // login: async ({ email, password }) => {
-    //     console.log('we are here!', email, password)
-    //     const user = await Proffesor.findOne({ email });
-    //     console.log(user)
-    //     if (!user) throw new Error("user email doesn't exist");
-    //     const isEqual = await bcrypt.compare(password, user.password);
-    //     if (!isEqual) throw new Error("user password doesn't exist");
-    //     const token = jwt.sign(
-    //         { email: user.email },
-    //         config.get('jwtPrivateKey'),
-    //         { expiresIn: '1h' })
-    //     return { userId: user.id, token, name: user.name, role: user.role }
-    // },
-    // proffesorsList: async ({ name }) => {
-    //     let filteredProffesors = []
-    //     try {
+        } catch (ex) {
+            return new Error(ex.message)
+        }
+        console.log(filteredCourses)
 
-    //         const proffesors = await Proffesor.find();
-    //         if (proffesors.length === 0) {
+        return filteredCourses
+    },
+    removeCourse: async ({ courseId, proffesorId }) => {
+        try {
+            course = await Course.findByIdAndRemove(
+                { _id: courseId },
+                { new: true }
+            )
+            let proffesorList = await Proffesor.findById(
+                proffesorId
+            )
+            if (proffesorList.length === 0) return new Error("There are no courses for this proffesor.")
+            let update = proffesorList.registerCourses.filter(course => {
+                return course.toString() !== courseId.toString()
+            });
+            await Proffesor.findByIdAndUpdate(proffesorId,
+                { $set: { registerCourses: update } }, { new: true }
+            )
+            filteredCourses = await proffesorObject.getProffesorCourses({ proffesorId })
+        } catch (ex) {
+            return new Error(ex.message)
+        }
 
-    //             throw new Error('There are no proffesors yet!')
-    //         }
-    //         filteredProffesors = proffesors.map(p => ({ name: p.name, email: p.email }))
-    //     } catch (ex) {
-    //         console.log(ex.message)
-    //     }
-    //     return filteredProffesors
-    // }
+        return filteredCourses
+    },
+
+
+
 };
+module.exports = proffesorObject

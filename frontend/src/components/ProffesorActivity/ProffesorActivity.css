@@ -1,0 +1,55 @@
+.proffesor-Activity__wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.proffesor-activity__container {
+    margin: auto;
+}
+
+
+.professor__activity__courses {
+    display: grid;
+    grid-gap: 50px;
+    justify-content: center;
+    text-align: center;
+    grid-template-columns: repeat(4, 250px);
+    grid-auto-rows: 450px;
+}
+
+
+
+img.course__proffesor {
+    height: 100px;
+    width: 200px;
+    margin: auto;
+}
+
+.proffesor_course__body {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    text-align: center;
+    height: 200px !important;
+    width: 200px;
+    margin: auto auto 10px auto;
+}
+
+.course__button__container {
+    display: flex;
+    margin-top: auto;
+    justify-content: center;
+}
+
+.course__button__container button {
+    margin: 5px;
+}
+
+.proffesor__register__students__text {
+    margin-top: auto;
+    font-size: 10px;
+}
+
+.proffesor__register__students__text b {
+    font-size: 14px;
+}

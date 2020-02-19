@@ -1,10 +1,10 @@
-const authResolver = require('./auth');
+const adminResolver = require('./admin');
 const proffesorResolver = require('./proffesor');
 const studentResolver = require('./student');
 const courseResolver = require('./course');
 
 const rootResolver = {
-    ...authResolver,
+    ...adminResolver,
     ...proffesorResolver,
     ...studentResolver,
     ...courseResolver

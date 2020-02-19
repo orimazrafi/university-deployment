@@ -1,0 +1,9 @@
+.dropzone__image__container {
+    cursor: pointer;
+}
+
+img.dropzone {
+    margin: auto;
+    height: 200px;
+    width: 200px;
+}
