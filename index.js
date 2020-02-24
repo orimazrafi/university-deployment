@@ -4,6 +4,7 @@ const graphqlHttp = require('express-graphql');
 const { graphqlUploadExpress } = require('graphql-upload')
 const mongoose = require('mongoose');
 const Course = require('./models/course');
+const path = require('path');
 
 const config = require('config')
 const grapQlSchema = require('./graphql/schema')
@@ -70,6 +71,12 @@ app.use('/graphql-university',
         rootValue: rootResolvers,
         graphiql: true
     }))
+
+app.use(express.static('public'));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);

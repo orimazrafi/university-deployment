@@ -14,7 +14,7 @@ export function setCloudinaryUserObject(user: { name: string, userId: string }, 
 export function graphqlconfiguration(requestBody: { query: string }) {
     return {
         method: "POST",
-        url: "http://localhost:8000/graphql-university",
+        url: "/graphql-university",
         data: requestBody
     }
 }
