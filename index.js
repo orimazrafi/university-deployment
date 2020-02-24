@@ -83,7 +83,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(
-    config.get('db')
+    'mongodb://orimazrafi:ola81610@ds353358.mlab.com:53358/heroku_pj8v2nnz'
 ).
     then(() =>
         http.listen(port)

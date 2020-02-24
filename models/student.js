@@ -34,7 +34,7 @@ studentSchema.methods.generateAuthToken = function () {
             email: this.email,
             role: this.role
         },
-        config.get("jwtPrivateKey"),
+        'unsecureKey',
         { expiresIn: '1h' }
     );
     return token;

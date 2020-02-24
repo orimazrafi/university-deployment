@@ -37,7 +37,7 @@ proffesorSchema.methods.generateAuthToken = function () {
             name: this.name,
             role: this.role
         },
-        config.get("jwtPrivateKey"),
+        'unsecureKey',
         { expiresIn: '1h' }
     );
     return token;
