@@ -81,7 +81,8 @@ app.get('*', (req, res) => {
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true); mongoose.connect(
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(
     config.get('db')
 ).
     then(() =>
