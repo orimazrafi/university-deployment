@@ -64,7 +64,7 @@ io.on("connection", socket => {
 
 
 
-app.use('/graphql-university',
+app.use('/heroku_pj8v2nnz',
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
     graphqlHttp({
         schema: grapQlSchema,
