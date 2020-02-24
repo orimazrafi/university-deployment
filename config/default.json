@@ -1,6 +1,6 @@
 {
     "jwtPrivateKey": "unsecureKey",
-    "db": "mongodb://orimazrafi@gmail.com:Ola81610#@ds353358.mlab.com:53358/heroku_pj8v2nnz",
+    "db": "mongodb://orimazrafi@gmail.com:Ola81610@ds353358.mlab.com:53358/heroku_pj8v2nnz",
     "port": "8000",
     "requiresAuth": false
 }
