@@ -8,7 +8,7 @@ import { cloudinaryFetchUrl } from "../../helpers";
 import { reduxGetCourse } from './../../features/Courses/CourseSlice';
 // import { animateScroll as scroll, Scroll } from "react-scroll";
 import "./Chat.css";
-const socket: SocketIOClient.Socket = socketIOClient("http://localhost:8000")
+const socket: SocketIOClient.Socket = socketIOClient("/8000")
 // const scrollToRef = (ref: any) => window.scrollTo(0, ref.current.offsetTop)
 
 // var Element = Scroll.Element;
