@@ -5,15 +5,15 @@ import { proffesor, student } from "../../helpers";
 import "./Activity.css";
 
 
-export const Activity = ({ role, userId }: { role: string, name: string, userId: string }) => {
+export const Activity = ({ role, userId, name, publicId }: { role: string, name: string, userId: string, publicId: string }) => {
     return (
         <div className="activity__container">
             {role === proffesor && (
-                <ProffesorActivity proffesorId={userId} />
+                <ProffesorActivity proffesorId={userId} publicId={publicId} name={name} />
             )}
             {role === student &&
                 <StudentActivity
-                    studentId={userId} />
+                    studentId={userId} name={name} publicId={publicId} />
             }
         </div>
     )

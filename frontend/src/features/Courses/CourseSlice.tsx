@@ -7,6 +7,7 @@ const course = createSlice({
     initialState: {
         proffesorCourses: [],
         courses: [],
+        course: {},
         loading: false
     },
     reducers: {
@@ -16,6 +17,10 @@ const course = createSlice({
         setCourses: (state, action) => {
             state.courses = action.payload
         },
+        setCourse: (state, action) => {
+            state.course = action.payload
+        },
+
         setLoading: (state, action) => {
             state.loading = action.payload
         }
@@ -25,6 +30,7 @@ const course = createSlice({
 export const {
     setProffesorCourses,
     setCourses,
+    setCourse,
     setLoading
 } = course.actions;
 export default course.reducer
@@ -59,6 +65,47 @@ export const reduxGetProffesorCourses = (proffesorId: string
     } catch (ex) {
         console.error(ex.message);
     }
+}
+export const reduxGetCourse = (courseId: string
+) => async (dispatch: AppDispatch) => {
+    // console.log("courseId", courseId)
+    let course;
+    let requestBody = {
+        query: `
+            query {
+                getCourse(courseId: "${courseId}") {
+                    name
+                    points 
+                    courseId
+                    description 
+                    publicId
+                    proffesorId 
+                    registerStudents
+                    courseChat {
+                        sender
+                        name
+                        message
+                        time
+                        publicId
+                    }
+            }
+          }
+              `
+    };
+    try {
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+        // console.log(data)
+        if (!data.data.getCourse) return console.error(data.errors[0].message)
+        course = await data.data.getCourse
+        await dispatch(setCourse(data.data.getCourse))
+
+    } catch (ex) {
+        console.error(ex.message);
+    }
+    return course
 }
 export const reduxGetCourses = (studentId: string
 ) => async (dispatch: AppDispatch) => {

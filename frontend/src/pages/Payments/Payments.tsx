@@ -24,7 +24,7 @@ export const Payments = () => {
                     </b>
                     courses that are register
                     </h4>
-                <h2>your university is in a profit of{" " + 2000 * courses.reduce((acc: any, cur: any) => {
+                <h2>Your university as income of{" " + 2000 * courses.reduce((acc: any, cur: any) => {
                     return acc = acc + cur.registerStudents.length
                 }, 0)}$</h2>
             </div>

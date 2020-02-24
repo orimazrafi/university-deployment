@@ -18,12 +18,12 @@ import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
 
 const App = () => {
-  const [user, setUser] = React.useState({ name: "", token: "", role: "", userId: "" })
+  const [user, setUser] = React.useState({ name: "", token: "", role: "", userId: "", publicId: "" })
   const credentials: any = localStorage.getItem('credentials');
   React.useEffect(() => {
     if (credentials !== null) {
-      const { name, token, role, userId } = JSON.parse(credentials)
-      setUser({ name, token, role, userId })
+      const { name, token, role, userId, publicId } = JSON.parse(credentials)
+      setUser({ name, token, role, userId, publicId })
     }
   }, [credentials])
 
@@ -81,7 +81,11 @@ const App = () => {
           }
           {user.token &&
             <Route path="/activity" >
-              <Activity name={user.name} role={user.role} userId={user.userId} />
+              <Activity
+                name={user.name}
+                role={user.role}
+                userId={user.userId}
+                publicId={user.publicId} />
             </Route>
           }
           <Route path="/my-profile" >

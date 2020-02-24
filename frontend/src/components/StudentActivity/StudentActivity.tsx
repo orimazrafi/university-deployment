@@ -7,11 +7,10 @@ import { cloudinaryFetchUrl } from "../../helpers";
 import "./StudentActivity.css";
 import { StudentCourses } from "../../interfaces";
 
-export const StudentActivity = ({ studentId }: { studentId: string }) => {
+export const StudentActivity = ({ studentId, name, publicId }: { studentId: string, name: string, publicId: string }) => {
     const history = useHistory()
     const dispatch = useDispatch()
     const { studentCourses } = useSelector((state: { student: { studentCourses: StudentCourses[] } }) => state.student)
-
     React.useEffect(() => {
         const onLoad = async () => {
             await dispatch(reduxGetStudentCourses(studentId))
@@ -21,7 +20,7 @@ export const StudentActivity = ({ studentId }: { studentId: string }) => {
     }, [dispatch, studentId])
 
     const handleChat = (courseId: string) => {
-        history.push(`/chat/${courseId}`, { studentId, courseId })
+        history.push(`/chat/${courseId}`, { studentId, courseId, name, publicId })
     }
 
     return (
@@ -30,7 +29,7 @@ export const StudentActivity = ({ studentId }: { studentId: string }) => {
                 <h1>my courses!</h1>
                 <h3>
                     currently you are learning
-                    {studentCourses.length} courses
+                    {" " + studentCourses.length} courses
                     <br />
                     and a total of
                 {" "}{studentCourses && studentCourses.reduce((acc: number, cur: StudentCourses) => {

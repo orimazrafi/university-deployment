@@ -10,9 +10,13 @@ import { UseCreateCourse } from './../../hooks/UseCreateCourse';
 import { UseUpdateCourse } from "../../hooks/UseUpdateCourse";
 import { ChangeEvent, ProffesorWithCourses } from "../../interfaces";
 import { cloudinaryFetchUrl } from "../../helpers";
+import { useHistory } from "react-router-dom";
+
 import "./ProffesorActivity.css";
 
-export const ProffesorActivity = ({ proffesorId }: { proffesorId: string }) => {
+export const ProffesorActivity = ({ proffesorId, publicId, name }: { proffesorId: string, publicId: string, name: string }) => {
+    const history = useHistory()
+
     const { proffesorCourses } = useSelector((state: { course: { proffesorCourses: ProffesorWithCourses[] } }) => state.course)
     const dispatch = useDispatch()
     const [modal, setModal] = useState(false);
@@ -120,7 +124,10 @@ export const ProffesorActivity = ({ proffesorId }: { proffesorId: string }) => {
     const handleChange = (event: ChangeEvent) => {
         UseChangeInput(event, setCourse)
     }
-
+    const handleChat = (courseId: string) => {
+        console.log(name)
+        history.push(`/chat/${courseId}`, { proffesorId, courseId, name, publicId })
+    }
     return (
         <div className="proffesor-activity__wrapper">
             <div className="row flex-spaces child-borders">
@@ -153,7 +160,7 @@ export const ProffesorActivity = ({ proffesorId }: { proffesorId: string }) => {
                                     }
                                     <div className="card-body proffesor_course__body">
                                         <p >points : {course.points}</p>
-                                        <h6 >description : {course.description}</h6>
+                                        <h6 ><b >description</b>   {course.description}</h6>
                                         {length === 0 && <div className="course__button__container">
                                             <button className="btn btn-small btn-primary" onClick={(e) => handleUpdate(course)}>Edit</button>
                                             <button className="btn btn-small btn-danger"
@@ -162,7 +169,12 @@ export const ProffesorActivity = ({ proffesorId }: { proffesorId: string }) => {
                                         }
                                         <small className="proffesor__register__students__text text-primary">
                                             {length > 0 ?
-                                                <b>{length > 1 ? `${length} Registered Students` : `${length} Registered Student`}</b>
+                                                <React.Fragment>
+
+                                                    <h6>{length > 1 ? `${length} Registered Students` : `${length} Registered Student`}</h6>
+                                                    <button className="btn btn-success" onClick={
+                                                        () => handleChat(course.courseId)}>course chat</button>
+                                                </React.Fragment>
                                                 :
                                                 <b>No Register yet.</b>
                                             }

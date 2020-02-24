@@ -55,6 +55,7 @@ module.exports = {
         return filteredStudents
     },
     getStudent: async ({ studentId }) => {
+        console.log('studentId', studentId)
         try {
             user = await Student.findById(studentId);
             if (!user) throw new Error('there is no student with that id.')
@@ -64,6 +65,7 @@ module.exports = {
             return new Error(ex.message)
         }
         const student = user.generateStudentToReturn(user, token)
+
         return student
     },
     getStudents: async ({ name }) => {
@@ -85,6 +87,40 @@ module.exports = {
             return new Error(ex.message)
         }
         return filteredStudents
+    },
+
+    getStudentsWithCoursesName: async ({ name }) => {
+        let studentsWithCoursesName = []
+        try {
+            const students = await Student.find();
+            if (students.length === 0) {
+                throw new Error('There are no students yet!')
+            }
+
+
+            const courses = await Course.find()
+            studentsWithCoursesName = students.map(student => ({
+                name: student.name,
+                email: student.email,
+                role: student.role,
+                publicId: student.publicId,
+                registerCourses:
+                    student.registerCourses.map(course => {
+                        const index = courses.findIndex(c => {
+                            return c._id.toString() === course
+                        })
+                        if (index !== -1) {
+                            return { id: course, name: courses[index].name }
+                        }
+                    }
+                    )
+            }))
+
+
+        } catch (ex) {
+            return new Error(ex.message)
+        }
+        return studentsWithCoursesName
     },
     getStudentCourses: async ({ studentId }) => {
         let courses = []

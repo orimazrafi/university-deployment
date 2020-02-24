@@ -12,8 +12,8 @@
     margin-top: auto;
 }
 
-.card-course {
-    /* height: 500px; */
+.courses__list__image {
+    height: 100px;
 }
 
 .card-course .student__profile__modal {

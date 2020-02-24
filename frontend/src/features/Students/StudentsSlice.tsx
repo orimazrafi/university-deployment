@@ -35,21 +35,53 @@ export default student.reducer
 
 
 
+export const reduxGetStudentsWithCousesName = (
+) => async (dispatch: AppDispatch) => {
+    let isSuccess = false;
+    let requestBody = {
+        query: `
+                query {
+                    getStudentsWithCoursesName(name: "ori mazrafi") {
+                        name
+                        email
+                        role
+                        publicId
+                        registerCourses{
+                            id
+                            name
+                        }
+                }
+              }
+                  `
+    };
+    try {
+        const configure: any = graphqlconfiguration(requestBody)
+        const { data } = await axios(
+            configure
+        );
+        if (!data.data.getStudentsWithCoursesName) return new Error(data.errors[0].message)
+        dispatch(setStudents(data.data.getStudentsWithCoursesName))
+    } catch (error) {
+        return new Error(error.message)
+    }
+    isSuccess = true
+    return isSuccess
+}
 export const reduxGetStudents = (
 ) => async (dispatch: AppDispatch) => {
     let isSuccess = false;
     let requestBody = {
         query: `
-            query {
-                getStudents(name: "ori mazrafi") {
-                    name
-                    email
-                    role
-                    registerCourses
-                    publicId
-            }
-          }
-              `
+                query {
+                    getStudents(name: "ori mazrafi") {
+                        name
+                        email
+                        role
+                        registerCourses
+                        publicId
+                }
+              }
+                  `
     };
     try {
         const configure: any = graphqlconfiguration(requestBody)
@@ -67,6 +99,7 @@ export const reduxGetStudents = (
 
 export const reduxSetStudent = (studentId: string
 ) => async (dispatch: AppDispatch) => {
+    console.log(studentId)
     let requestBody = {
         query: `
                 query {

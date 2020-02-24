@@ -40,9 +40,9 @@ export const Course = (
             <div className=" card card-course" key={name}>
                 <h5 className="card-title" style={{ textAlign: "center" }}>{name} </h5>
                 {publicId !== null ?
-                    <img className="student__profile__modal" src={`${cloudinaryFetchUrl}/${publicId}`} alt="profile" height="100" width="200" />
+                    <img className="courses__list__image" src={`${cloudinaryFetchUrl}/${publicId}`} alt="profile" height="100" width="200" />
                     :
-                    <img className="student__profile__modal" src={`${cloudinaryFetchUrl}/download_nljny4`} alt="profile" height="100" width="200" />
+                    <img className="courses__list__image" src={`${cloudinaryFetchUrl}/download_nljny4`} alt="profile" height="100" width="200" />
                 }                <div className="card-body card__course__body">
                     <p className="card-title">points : <b>{points}</b> </p>
                     <div>

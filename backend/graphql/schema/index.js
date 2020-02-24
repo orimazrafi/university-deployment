@@ -1,7 +1,6 @@
 const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
-
 type User {
   userId: ID!
   email: String!
@@ -21,16 +20,11 @@ type Admin {
 type Pro{
   proffesorId: String
 }
-
-
-
-
 input UserInput {
   email: String!
   password: String!
   name: String!
 }
-
 type Proffesor{
   userId: ID!
   name: String!
@@ -40,18 +34,15 @@ type Proffesor{
   registerCourses: [String]
   publicId: String!
 }
-
 input ProffesorInput {
   email: String!
   password: String!
   name: String!
 }
-
 input RegisterInput{
   courseId: ID!
   studentId: ID!
 }
-
 type Proffesors{
   userId: ID!
   name: String!
@@ -59,7 +50,6 @@ type Proffesors{
   registerCourses: [String]
   publicId: String!
 }
-
 type Students{
   studentId: ID!
   name: String!
@@ -69,7 +59,6 @@ type Students{
   image: String!
   publicId: String!
 }
-
 type Student {
   userId: ID!
   email: String!
@@ -91,6 +80,24 @@ type Course {
   registerStudents: [String]
   publicId: String!
 }
+type CourseWithChat {
+  courseId: ID!
+  name: String!
+  points: Int!
+  description: String!
+  proffesorId: ID!
+  registerStudents: [String]
+  publicId: String!
+  courseChat: [CourseChat]
+}
+type CourseChat{
+  sender: ID!
+  name:String!
+  message:String!
+  time:String!
+  publicId:String!
+}
+
 
 
 type Registerd{
@@ -99,8 +106,6 @@ type Registerd{
 type CourseId{
   _id: ID!
 }
-
-
 type Courses {
   courseId: ID!
   name: String!
@@ -109,20 +114,32 @@ type Courses {
   proffesorId: ID!
   registerStudents: [String]
 }
+
+
+type StudentsWithCourseName{
+    name: String!
+    email: String!
+    role: String!
+    publicId: String!
+    registerCourses: [S]
+  }
+  type S{
+    id:ID!
+    name:String!
+  }
+
+
 type C {
   courseId: ID!
   name: String!
   proffesorId: ID!
 }
-
-
 input StudentInput {
   email: String!
   password: String!
   name: String!
   publicId: String!
 }
-
 input CourseInput {
   name: String!
   points: Int!
@@ -137,23 +154,22 @@ input CourseUpdateInput {
   description: String!
   publicId: String!
 }
-
-
 type RootQuery {
   loginAdmin(email:String!, password:String!): User
   loginProffesor(email:String!, password:String!): Proffesor
   loginStudent(email:String!, password:String!): Student
   proffesorsList(name: String!): [Proffesors]
+  getStudentsWithCoursesName(name: String!):[StudentsWithCourseName]
   getStudents(name: String!):[Students]
   getProffesorCourses(proffesorId: ID!): [Course]
   getProffesor(proffesorId: ID!): Proffesor
   getCourses(studentId: ID!): [Course]
-  getStudent(studentId: ID!): Student
+  getCourse(courseId: ID!): CourseWithChat
+  getStudent(studentId: ID!):  Student
   getStudentCourses(studentId: ID!): [Course]
   getAdmin(adminId: ID!): Admin
   getProffesorRegisterCourses(name: String!): [C]
 }
-
 type RootMutation {
     createAdmin(userInput: UserInput): User
     createStudent(studentInput: StudentInput): Student

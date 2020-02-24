@@ -3,26 +3,20 @@ const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const { graphqlUploadExpress } = require('graphql-upload')
 const mongoose = require('mongoose');
-var multer = require('multer')
+const Course = require('./models/course');
 
 const config = require('config')
 const grapQlSchema = require('./graphql/schema')
 const rootResolvers = require('./graphql/resolvers/index')
 
 const app = express();
+const http = require("http").Server(app);
 
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
-    }
-})
-var upload = multer({ storage: storage }).single('file')
+const socketIO = require("socket.io");
+const port = config.get('port');
 
+const io = socketIO(http)
 
-app.use(bodyParser.json());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
@@ -35,6 +29,37 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
+io.on("connection", socket => {
+    console.log("Connection established!")
+    socket.on("Join", async room => {
+        socket.on(room, async (msg) => {
+            let course = await Course.findByIdAndUpdate(
+                { _id: msg.courseId },
+                {
+                    $push: {
+                        courseChat:
+                        {
+                            sender: msg.userId,
+                            name: msg.userName,
+                            message: msg.message,
+                            time: msg.time,
+                            publicId: msg.publicId
+
+                        }
+                    }
+                }, { new: true }
+            )
+            await course.save()
+            io.emit(room, { msg, room })
+
+        })
+        io.emit("Join", room);
+    });
+    socket.on("disconnect", () => {
+        console.log("Disconnected!")
+    })
+
+})
 
 
 
@@ -52,10 +77,8 @@ mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true); mongoose.connect(
     config.get('db')
 ).
-
     then(() =>
-        app.listen(config.get('port'))
+        http.listen(port)
     ).catch(err => {
         console.log(err)
     })
-module.exports.upload = upload

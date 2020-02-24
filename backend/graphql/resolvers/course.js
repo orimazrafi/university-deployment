@@ -94,6 +94,33 @@ let proffesorObject = {
 
         return filteredCourses
     },
+    // getCourse(courseId: ID!): Course
+
+    getCourse: async ({ courseId }) => {
+        let course;
+        let courseToReturn;
+        try {
+            course = await Course.findById(courseId);
+            courseToReturn = {
+                courseId: course._id,
+                name: course.name,
+                points: course.points,
+                description: course.description,
+                proffesorId: course.proffesorId,
+                registerStudents: course.registerStudents,
+                publicId: course.publicId,
+                courseChat: course.courseChat
+            }
+            // if (courses.length === 0) throw new Error('There are no courses yet!')
+            // filteredCourses = courses.map(course => (
+            // course.generatecourseToReturn(course)
+            // ))
+        } catch (ex) {
+            return new Error(ex.message)
+        }
+        // console.log('course', courseToReturn)
+        return courseToReturn
+    },
     getCourses: async ({ studentId }) => {
         try {
             courses = await Course.find();

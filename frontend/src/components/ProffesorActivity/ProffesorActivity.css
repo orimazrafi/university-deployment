@@ -50,6 +50,8 @@ img.course__proffesor {
     font-size: 10px;
 }
 
-.proffesor__register__students__text b {
-    font-size: 14px;
+.proffesor__register__students__text h6 {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }

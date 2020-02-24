@@ -7,7 +7,7 @@
     grid-gap: 50px;
     justify-content: center;
     grid-template-columns: repeat(4, 200px);
-    grid-auto-rows: 400px;
+    grid-auto-rows: 600px;
     text-align: center;
 }
 
@@ -17,4 +17,15 @@
     height: 200px;
     width: 200px;
     display: block;
+}
+
+.card__student__courses____body {
+    padding: 10px !important;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    text-align: center;
+    height: 200px !important;
+    width: 200px;
+    margin: auto;
 }

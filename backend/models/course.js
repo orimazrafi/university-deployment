@@ -26,6 +26,9 @@ const courseSchema = new Schema({
     },
     registerStudents: {
         type: Array
+    },
+    courseChat: {
+        type: Array
     }
 
 })
@@ -38,7 +41,8 @@ courseSchema.methods.generatecourseToReturn = function (course) {
         description: course.description,
         proffesorId: course.proffesorId,
         registerStudents: course.registerStudents,
-        publicId: course.publicId
+        publicId: course.publicId,
+        courseChat: course.courseChat
     };
 };
 
