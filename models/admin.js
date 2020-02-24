@@ -31,7 +31,7 @@ adminSchema.methods.generateAuthToken = async function () {
             email: this.email,
             role: this.role
         },
-        'unsecureKey',
+        config.get("jwtPrivateKey"),
         { expiresIn: '1h' }
     );
     return token;

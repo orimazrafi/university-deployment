@@ -64,7 +64,7 @@ io.on("connection", socket => {
 
 
 
-app.use('/heroku_pj8v2nnz',
+app.use('/graphql-university',
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
     graphqlHttp({
         schema: grapQlSchema,
@@ -83,7 +83,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(
-    'mongodb://orimazrafi:ola81610@ds353358.mlab.com:53358/heroku_pj8v2nnz'
+    config.get('db')
 ).
     then(() =>
         http.listen(port)
