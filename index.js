@@ -82,9 +82,8 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(
-    config.get('db')
-).
+mongoose.connect('mongodb://orimazrafi:ola81610@ds159129.mlab.com:59129/gql-ninja')
+    .
     then(() =>
         http.listen(port)
     ).catch(err => {
