@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const Course = require('./models/course');
 const path = require('path');
 
-const config = require('config')
 const grapQlSchema = require('./graphql/schema')
 const rootResolvers = require('./graphql/resolvers/index')
 
@@ -14,7 +13,7 @@ const app = express();
 const http = require("http").Server(app);
 
 const socketIO = require("socket.io");
-const port = config.get('port');
+const port = 8000;
 
 const io = socketIO(http)
 

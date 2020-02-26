@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const config = require('config');
+// const config = require('config');
 
 const Schema = mongoose.Schema;
 const adminSchema = new Schema({
@@ -31,7 +31,7 @@ adminSchema.methods.generateAuthToken = async function () {
             email: this.email,
             role: this.role
         },
-        config.get("jwtPrivateKey"),
+        'unsecureKey',
         { expiresIn: '1h' }
     );
     return token;
