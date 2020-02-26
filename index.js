@@ -81,7 +81,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://orimazrafi:ola81610@ds159129.mlab.com:59129/gql-ninja')
+mongoose.connect('mongodb://orimazrafi:ola81610@ds131512.mlab.com:31512/heroku_jd62rj63')
     .
     then(() =>
         http.listen(port)
