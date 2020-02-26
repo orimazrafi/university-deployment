@@ -13,7 +13,7 @@ const app = express();
 const http = require("http").Server(app);
 
 const socketIO = require("socket.io");
-const port = 8000;
+const port = process.env.PORT
 
 const io = socketIO(http)
 
@@ -81,7 +81,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://orimazrafi:ola81610@ds131512.mlab.com:31512/heroku_jd62rj63')
+mongoose.connect(process.env.MONGOLAB_URI)
     .
     then(() =>
         http.listen(port)
