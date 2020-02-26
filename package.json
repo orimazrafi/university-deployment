@@ -4,10 +4,7 @@
   "description": "hihi",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "server": "node index.js",
-    "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run frontend\""
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
