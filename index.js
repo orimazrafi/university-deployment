@@ -82,9 +82,12 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect('mongodb://orimazrafi:ola81610@ds159129.mlab.com:59129/gql-ninja')
-    .
-    then(() =>
-        http.listen(port)
-    ).catch(err => {
-        console.log(err)
-    })
+app.listen(8000, () => {
+    console.log('now listning for requests on port 8000.')
+})
+// .
+    // then(() =>
+    //     http.listen(port)
+    // ).catch(err => {
+    //     console.log(err)
+    // })
