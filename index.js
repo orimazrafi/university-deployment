@@ -82,10 +82,10 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://orimazrafi:ola81610@ds159129.mlab.com:59129/gql-ninja')
+mongoose.connect('mongodb://localhost/frozen-ocean-71770')
     .
     then(() =>
-        http.listen(port)
+        http.listen(8000)
     ).catch(err => {
         console.log(err)
     })
