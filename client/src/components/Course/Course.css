@@ -1,0 +1,22 @@
+.card__course__body {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    text-align: center;
+    height: 200px !important;
+    width: 200px;
+    margin: auto;
+}
+
+.card__small__register {
+    margin-top: auto;
+}
+
+.courses__list__image {
+    height: 100px;
+}
+
+.card-course .student__profile__modal {
+    margin: unset;
+    /* height: 400px; */
+}

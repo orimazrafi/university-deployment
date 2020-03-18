@@ -1,0 +1,20 @@
+.chat__wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.student__profile__modal {
+    border-radius: 50%;
+    height: 50px;
+    display: inline-block;
+}
+
+.chat__container {
+    display: flex;
+    justify-content: center;
+}
+
+.messages__container {
+    overflow-y: scroll;
+    height: 400px;
+}

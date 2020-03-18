@@ -1,0 +1,127 @@
+import React, { useRef } from "react";
+import { useHistory } from "react-router-dom";
+import { Icon } from "antd";
+import { useDispatch } from "react-redux";
+import socketIOClient from "socket.io-client";
+import moment from "moment";
+import { cloudinaryFetchUrl } from "../../helpers";
+import { reduxGetCourse } from "./../../features/Courses/CourseSlice";
+// import { animateScroll as scroll, Scroll } from "react-scroll";
+import "./Chat.css";
+const socket: SocketIOClient.Socket = socketIOClient("/8080");
+// const scrollToRef = (ref: any) => window.scrollTo(0, ref.current.offsetTop)
+
+// var Element = Scroll.Element;
+// var scroller = Scroll.scroller;
+
+export const Chat = () => {
+  const myRef = useRef(null);
+
+  const messagesContainer: any = useRef();
+  const dispatch = useDispatch();
+
+  const history: any = useHistory();
+  const [message, setMessage] = React.useState("");
+  const [messages, setMessages] = React.useState<any>([]);
+  React.useEffect(() => {
+    const onLoad = async () => {
+      const course: any = await dispatch(
+        reduxGetCourse(history.location.state.courseId)
+      );
+      if (course.courseChat.length > 0) {
+        setMessages(course.courseChat);
+      }
+    };
+
+    socket.emit("Join", history.location.state.courseId);
+
+    socket.on(history.location.state.courseId, (m: any) => {
+      // scrollToRef(myRef)
+
+      // messagesContainer.scroll.scrollToBottom()
+      setMessages((prevMessages: any) => [...prevMessages, m.msg]);
+    });
+
+    onLoad();
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [dispatch, history]);
+
+  const hanleSearchChange = (e: any) => {
+    setMessage(e.target.value);
+  };
+
+  const pushSendMessage = () => {
+    let userId =
+      history.location.state.studentId || history.location.state.proffesorId;
+    let courseId = history.location.state.courseId;
+    let userName = history.location.state.name;
+    let publicId = history.location.state.publicId;
+    let time = moment(new Date()).format("HH:mm");
+
+    let type = "text";
+    socket.emit(history.location.state.courseId, {
+      message,
+      userId,
+      userName,
+      courseId,
+      time,
+      publicId,
+      type
+    });
+
+    // Scroll.scroller.scrollTo('myScrollToElement', {
+    //     // duration: 1500,
+    //     // delay: 100,
+    //     smooth: true,
+    //     containerId: 'ContainerElementID',
+    //     // offset: 50, // Scrolls to element + 50 pixels down the page
+    // })
+    setMessage("");
+  };
+  return (
+    <div className="chat__wrapper">
+      <h2> Real Time Chat</h2>
+
+      <div className="messages__container">
+        {messages &&
+          messages.length > 0 &&
+          messages.map((m: any, index: any) => (
+            <div key={index}>
+              {m.time + " "}
+              <img
+                className="student__profile__modal"
+                src={`${cloudinaryFetchUrl}/${m.publicId}`}
+                alt="profile"
+              />
+              {" " + m.message}
+            </div>
+          ))}
+      </div>
+      <div className="chat__container" ref={messagesContainer}>
+        <input
+          type="text"
+          placeholder="Let's start talking"
+          value={message}
+          onChange={hanleSearchChange}
+          onKeyDown={(e: any) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              pushSendMessage();
+            }
+          }}
+        />
+        <button className="btn btn-primary" onClick={pushSendMessage}>
+          {" "}
+          <Icon type="enter" />
+        </button>
+      </div>
+      {/* <div id="ContainerElementID" */}
+      {/* > */}
+
+      {/* </div> */}
+    </div>
+  );
+};

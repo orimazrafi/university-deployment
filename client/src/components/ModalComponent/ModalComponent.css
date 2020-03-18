@@ -1,0 +1,28 @@
+.modal-close {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal-body {
+    text-align: center;
+    top: 400px !important;
+
+}
+
+.modal-close.modal {
+    display: none !important;
+
+}
+
+
+.modal-open {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+.modal-open.modal {
+
+    display: block !important;
+
+}
