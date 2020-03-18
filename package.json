@@ -1,10 +1,16 @@
 {
-  "name": "backfdfdend",
+  "name": "university",
   "version": "1.0.0",
-  "description": "hihi",
-  "main": "index.js",
+  "description": "Fullstack app with React, GraphQl, Node.js and mongoDB for handling university registrations, authentications, authorizations and notifications.",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "start": "node server.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently -n 'server,client' -c 'red,green'  \"nodemon server.js\" \"npm run client\""
   },
   "engines": {
     "node": "10.15.3",
