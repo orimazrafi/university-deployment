@@ -1,5 +1,5 @@
-export const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dyloyoawh/image/upload`;
-export const cloudinaryFetchUrl = `https://res.cloudinary.com/dyloyoawh/image/upload`;
+export const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`;
+export const cloudinaryFetchUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`;
 export const courseAvatar =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRd-roLsuU5Ctl3dEDcm87Wl8dGQBslplw9F7ArVcFNPMnmOs_d";
 export function setCloudinaryUserObject(

@@ -35,7 +35,7 @@ proffesorSchema.methods.generateAuthToken = function() {
       name: this.name,
       role: this.role
     },
-    "unsecureKey",
+    process.env.JWT_PRIVATE_KEY,
     { expiresIn: "1h" }
   );
   return token;

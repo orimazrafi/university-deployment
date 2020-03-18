@@ -74,10 +74,7 @@ mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose
-  .connect(
-    process.env.MONGODB_URI ||
-      "mongodb+srv://orimazrafi:ola81610@cluster0-pixs0.mongodb.net/test"
-  )
+  .connect(process.env.MONGODB_URI || process.env.LOCAL_MONGODB_URI)
   .then(() => http.listen(PORT))
   .catch(err => {
     console.log(err);

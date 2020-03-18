@@ -1,6 +1,0 @@
-{
-  "jwtPrivateKey": "unsecureKey",
-  "db": "mongodb://localhost/frozen-ocean-71770",
-  "port": "8080",
-  "requiresAuth": false
-}

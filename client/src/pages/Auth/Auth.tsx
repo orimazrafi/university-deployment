@@ -112,7 +112,11 @@ export const Auth = () => {
       )}
 
       <div className={handleClassName()}>
-        <button type="submit" className="btn-secondary">
+        <button
+          type="submit"
+          className="btn-secondary"
+          disabled={handleDisabled()}
+        >
           {isLogin ? "Login" : "Signup"}
         </button>
         <button onClick={handleForm} className="btn-warning" type="button">
