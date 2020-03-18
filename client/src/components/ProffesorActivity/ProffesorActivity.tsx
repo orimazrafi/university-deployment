@@ -102,23 +102,22 @@ export const ProffesorActivity = ({
   const handleSave = async () => {
     try {
       let isSuccess: any = false;
-      // if (isUpdateModal) {
-      //     isSuccess = await UseUpdateCourse(course, cloudinaryImage);
-      //     if (isSuccess) {
-      //         setTimeout(() => {
-      //             setModal(false);
-      //         }, 1000)
-      //     }
-
-      // } else {
-      isSuccess = await UseCreateCourse(course, cloudinaryImage);
-      if (isSuccess) {
-        setTimeout(() => {
-          setModal(false);
-        }, 1000);
+      if (isUpdateModal) {
+        isSuccess = await UseUpdateCourse(course, cloudinaryImage);
+        if (isSuccess) {
+          setTimeout(() => {
+            setModal(false);
+          }, 1000);
+        }
+      } else {
+        isSuccess = await UseCreateCourse(course, cloudinaryImage);
+        if (isSuccess) {
+          setTimeout(() => {
+            setModal(false);
+          }, 1000);
+        }
       }
     } catch (ex) {
-      // }
       console.error(ex.message);
     }
   };
