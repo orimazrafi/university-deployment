@@ -84,7 +84,8 @@ export const ModalComponent = ({
             {userRole === "course" && (
               <Input
                 label="Points"
-                placeholder="1-6"
+                min="1"
+                max="6"
                 value={user.points}
                 handleChange={handleChange}
                 name="points"
