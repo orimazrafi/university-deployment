@@ -29,6 +29,7 @@ export const Chat = () => {
     };
 
     socket.emit("Join", history.location.state.courseId);
+    console.log(history.location.state.courseId);
 
     socket.on(history.location.state.courseId, (m: any) => {
       setMessages((prevMessages: any) => [...prevMessages, m.msg]);
