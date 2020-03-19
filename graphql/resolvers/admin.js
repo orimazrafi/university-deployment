@@ -53,16 +53,8 @@ module.exports = {
     };
   },
   updateAdmin: async ({ adminId, name, image, publicId }) => {
-    console.log("publicId", image);
-    console.log("publicId");
-    console.log("publicId");
-    console.log("publicId");
-    // let newStudents = []
     let updatedAdmin = {};
     try {
-      // let student = await Student.findById(studentId)
-      // console.log(student)
-
       let admin = await Admin.findByIdAndUpdate(
         { _id: adminId },
         {
@@ -81,8 +73,6 @@ module.exports = {
         publicId,
         email: admin.email
       };
-
-      console.log(updatedAdmin);
     } catch (ex) {
       console.log(ex.message);
     }

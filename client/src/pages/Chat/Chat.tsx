@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import { Icon } from "antd";
 import { useDispatch } from "react-redux";
@@ -10,9 +10,6 @@ import "./Chat.css";
 const socket: SocketIOClient.Socket = socketIOClient("/8080");
 
 export const Chat = () => {
-  const myRef = useRef(null);
-
-  const messagesContainer: any = useRef();
   const dispatch = useDispatch();
 
   const history: any = useHistory();
@@ -29,8 +26,6 @@ export const Chat = () => {
     };
 
     socket.emit("Join", { room: history.location.state.courseId });
-    console.log(history.location.state.courseId);
-
     socket.on(history.location.state.courseId, (m: any) => {
       setMessages((prevMessages: any) => [...prevMessages, m.msg]);
     });
@@ -55,15 +50,6 @@ export const Chat = () => {
     let time = moment(new Date()).format("HH:mm");
 
     let type = "text";
-    console.log({
-      message,
-      userId,
-      userName,
-      courseId,
-      time,
-      publicId,
-      type
-    });
     socket.emit(history.location.state.courseId, {
       message,
       userId,
@@ -95,7 +81,7 @@ export const Chat = () => {
             </div>
           ))}
       </div>
-      <div className="chat__container" ref={messagesContainer}>
+      <div className="chat__container">
         <input
           type="text"
           placeholder="Let's start talking"
