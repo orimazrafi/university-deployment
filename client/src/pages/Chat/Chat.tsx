@@ -6,13 +6,8 @@ import socketIOClient from "socket.io-client";
 import moment from "moment";
 import { cloudinaryFetchUrl } from "../../helpers";
 import { reduxGetCourse } from "./../../features/Courses/CourseSlice";
-// import { animateScroll as scroll, Scroll } from "react-scroll";
 import "./Chat.css";
 const socket: SocketIOClient.Socket = socketIOClient("/8080");
-// const scrollToRef = (ref: any) => window.scrollTo(0, ref.current.offsetTop)
-
-// var Element = Scroll.Element;
-// var scroller = Scroll.scroller;
 
 export const Chat = () => {
   const myRef = useRef(null);
@@ -36,9 +31,6 @@ export const Chat = () => {
     socket.emit("Join", history.location.state.courseId);
 
     socket.on(history.location.state.courseId, (m: any) => {
-      // scrollToRef(myRef)
-
-      // messagesContainer.scroll.scrollToBottom()
       setMessages((prevMessages: any) => [...prevMessages, m.msg]);
     });
 
@@ -62,6 +54,15 @@ export const Chat = () => {
     let time = moment(new Date()).format("HH:mm");
 
     let type = "text";
+    console.log({
+      message,
+      userId,
+      userName,
+      courseId,
+      time,
+      publicId,
+      type
+    });
     socket.emit(history.location.state.courseId, {
       message,
       userId,
@@ -72,13 +73,6 @@ export const Chat = () => {
       type
     });
 
-    // Scroll.scroller.scrollTo('myScrollToElement', {
-    //     // duration: 1500,
-    //     // delay: 100,
-    //     smooth: true,
-    //     containerId: 'ContainerElementID',
-    //     // offset: 50, // Scrolls to element + 50 pixels down the page
-    // })
     setMessage("");
   };
   return (
@@ -118,10 +112,6 @@ export const Chat = () => {
           <Icon type="enter" />
         </button>
       </div>
-      {/* <div id="ContainerElementID" */}
-      {/* > */}
-
-      {/* </div> */}
     </div>
   );
 };

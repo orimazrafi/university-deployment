@@ -209,7 +209,7 @@ export const ProffesorActivity = ({
                           </button>
                         </React.Fragment>
                       ) : (
-                        <b>No Register yet.</b>
+                        <b>No Student Register yet.</b>
                       )}
                     </small>
                   </div>
