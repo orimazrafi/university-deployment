@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 
 io.on("connection", socket => {
   console.log("Connection established!");
-  socket.on("Join", async room => {
+  socket.on("Join", async ({ room }) => {
     socket.on(room, async msg => {
       console.log("msg", msg);
       let course = await Course.findByIdAndUpdate(

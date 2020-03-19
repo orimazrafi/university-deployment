@@ -14,6 +14,7 @@ export const Home = () => (
   >
     <ReactPlayer
       width="100%"
+      height="unset"
       url={process.env.REACT_APP_CLOUDINARY_MP4_VIDEO}
       playing
       loop
