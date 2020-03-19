@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const graphqlHttp = require("express-graphql");
-const { graphqlUploadExpress } = require("graphql-upload");
 const mongoose = require("mongoose");
 const Course = require("./models/course");
 
@@ -57,7 +56,6 @@ io.on("connection", socket => {
 
 app.use(
   "/graphql-university",
-  graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   graphqlHttp({
     schema: grapQlSchema,
     rootValue: rootResolvers,
