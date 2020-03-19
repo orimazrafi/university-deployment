@@ -30,6 +30,7 @@ io.on("connection", socket => {
   console.log("Connection established!");
   socket.on("Join", async room => {
     socket.on(room, async msg => {
+      console.log("msg", msg);
       let course = await Course.findByIdAndUpdate(
         { _id: msg.courseId },
         {
@@ -46,6 +47,7 @@ io.on("connection", socket => {
         { new: true }
       );
       await course.save();
+
       io.emit(room, { msg, room });
     });
     io.emit("Join", room);
